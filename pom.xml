@@ -47,7 +47,6 @@
 			<artifactId>fastjson</artifactId>
 			<version>1.2.83</version>
 		</dependency>
-
 		<!--SpringBoot-Validation依赖-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
