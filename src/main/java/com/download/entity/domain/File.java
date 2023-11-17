@@ -13,12 +13,22 @@ public class File {
     @TableId(value="file_id", type = IdType.AUTO)
     private long fileId;
 
+    /**
+     * 文件名
+     */
     @TableField("file_name")
     private String fileName;
 
+
+    /**
+     * 文件类型
+     */
     @TableField("file_type")
     private String filetype;
 
+    /**
+     * 文件大小
+     */
     @TableField("file_size")
     private String fileSize;
 

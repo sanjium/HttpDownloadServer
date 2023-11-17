@@ -1,6 +1,6 @@
 package com.download.entity.domain;
 
-public class Settings {
+public class Setting {
 
     private String downloadPath;
 
