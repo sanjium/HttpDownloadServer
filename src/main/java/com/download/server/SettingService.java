@@ -1,4 +1,7 @@
 package com.download.server;
 
-public interface SettingService {
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.download.entity.domain.Setting;
+
+public interface SettingService  {
 }

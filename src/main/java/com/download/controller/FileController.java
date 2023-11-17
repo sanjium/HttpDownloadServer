@@ -19,10 +19,12 @@ public class FileController {
     @Resource
     private FileService fileService;
 
-    @PostMapping("/submit")
+   /* @PostMapping("/submit")
     @LogAnnotation(operation = "上传文件")
     public ResponseResult submitFiles(@RequestBody Transfer transfer){
         return ResponseResult.ok("上传文件成功");
-    }
+    }*/
+
+
 
 }
