@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 
-public class Files {
+public class File {
 
 
     @TableId(value="file_id", type = IdType.AUTO)
