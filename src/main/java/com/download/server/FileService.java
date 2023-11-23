@@ -6,10 +6,5 @@ import com.download.entity.domain.Log;
 
 import java.util.List;
 
-public interface FileService  {
-    String addFile(long fileId);
-
-    String get(long fileId);
-
-    List<File> getAll();
+public interface FileService  extends IService<File>{
 }

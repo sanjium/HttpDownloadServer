@@ -4,7 +4,7 @@ import com.download.aop.LogAnnotation;
 import com.download.entity.ResponseResult;
 import com.download.entity.domain.Setting;
 import com.download.entity.dto.SettingDTO;
-import com.download.mapper.SettingMapper;
+
 import com.download.server.SettingService;
 
 import org.springframework.beans.BeanUtils;

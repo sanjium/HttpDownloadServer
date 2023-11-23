@@ -42,7 +42,7 @@ public class File {
     /**
      * 创建时间
      */
-    @TableField("file_creatTime")
+    @TableField("file_creattime")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime fileCreatTime;
 

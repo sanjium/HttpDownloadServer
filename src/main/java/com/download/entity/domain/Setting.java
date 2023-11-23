@@ -14,27 +14,28 @@ import lombok.NoArgsConstructor;
 @TableName("download_setting")
 public class Setting {
 
-    @TableId(value = "download_settingId", type = IdType.AUTO)
+    @TableId(value = "download_settingid", type = IdType.AUTO)
     private long settingId;
-    @TableField("setting_downloadPath")
+
+    @TableField("setting_downloadpath")
     private String downloadPath;
 
     /**
      * 最大工作任务
      */
-    @TableField("setting_maxTasks")
+    @TableField("setting_maxtasks")
     private int maxTasks;
 
     /**
      * 最大下载速度
      */
-    @TableField("setting_downloadSpeed")
+    @TableField("setting_downloadspeed")
     private long maxDownloadSpeed;
 
     /**
      * 最大上传速度
      */
-    @TableField("setting_maxUploadSpeed")
+    @TableField("setting_maxuploadspeed")
     private long maxUploadSpeed;
 
 
