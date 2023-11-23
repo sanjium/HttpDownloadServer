@@ -1,51 +1,39 @@
 package com.download.controller;
 
 import com.download.aop.LogAnnotation;
+import com.download.entity.ResponseResult;
 import com.download.entity.domain.Setting;
+import com.download.entity.dto.SettingDTO;
+import com.download.mapper.SettingMapper;
 import com.download.server.SettingService;
-import jakarta.annotation.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
+
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.annotation.Resource;
+
+import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
-@RequestMapping("/Setting")
+@RequestMapping("/setting")
 public class SettingController {
-    @Resource
-    private Setting setting;
     @Resource
     private SettingService settingService;
 
-    @GetMapping
+    @GetMapping("/{id}")
     @LogAnnotation(operation = "返回")
-    public Setting fetchSettings(Model model){
-        Setting settings=downloadSetting();
-        model.addAttribute("settings",settings);
-        return null;
-       // return "setting";
+    public ResponseResult<SettingDTO> fetchSettings(@PathVariable Long id ){
+        Setting setting = settingService.getById(id);
+        SettingDTO settingDTO = new SettingDTO();
+        BeanUtils.copyProperties(setting,settingDTO);
+        return ResponseResult.ok(settingDTO);
     }
 
-    @GetMapping("/downloadSetting")
+
+    @PostMapping("/saveSettings")
     @ResponseBody
-    public Setting downloadSetting(){
-
-        long settingId=setting.getSettingId();
-        setting=settingService.get(settingId);
-        /*if(setting==null){
-
-        }*/
-        return setting;
-
-    }
-
-    @GetMapping("/saveSettings")
-    @ResponseBody
-    public boolean saveSetting(){
-        long settingId=setting.getSettingId();
-        setting=settingService.get(settingId);
+    public ResponseResult saveSetting(@RequestBody Setting setting){
         settingService.save(setting);
-        return true;
+        return ResponseResult.ok("true");
     }
 }

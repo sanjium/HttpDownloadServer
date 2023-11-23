@@ -45,6 +45,8 @@ public class ResponseResult<T> {
         this.data = data;
     }
 
+
+
     public static <T> ResponseResult<T> ok(T data) {
         return new ResponseResult<>(200, "请求成功", data);
     }
@@ -68,6 +70,7 @@ public class ResponseResult<T> {
     public static ResponseResult error(Integer code, String msg) {
         return new ResponseResult(code, msg);
     }
+
 
 
 }

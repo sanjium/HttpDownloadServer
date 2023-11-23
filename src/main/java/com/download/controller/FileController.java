@@ -1,15 +1,12 @@
 package com.download.controller;
 
-import com.download.aop.LogAnnotation;
-import com.download.entity.ResponseResult;
+
 import com.download.entity.domain.File;
-import com.download.entity.domain.Transfer;
+
 import com.download.server.FileService;
-import jakarta.annotation.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -23,7 +20,6 @@ public class FileController {
     private FileService fileService;
 
     @GetMapping("/fetchFileList")
-    @ResponseBody
     public List<File> fetchFileList(){
         List<File> fileList=fileService.getAll();
         if(fileList==null){

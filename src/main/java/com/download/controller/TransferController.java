@@ -12,6 +12,7 @@ public class TransferController {
     @PostMapping("/submit")
     @LogAnnotation(module = "任务列表模块", operation = "提交任务")
     public ResponseResult submitTransfer(@RequestBody Transfer transfer) {
+
         return ResponseResult.ok("访问提交接口成功");
     }
 

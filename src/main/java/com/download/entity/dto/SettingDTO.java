@@ -1,21 +1,12 @@
-package com.download.entity.domain;
+package com.download.entity.dto;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@TableName("download_setting")
-public class Setting {
-
-    @TableId(value = "download_settingId", type = IdType.AUTO)
-    private long settingId;
+@Component
+public class SettingDTO {
     @TableField("setting_downloadPath")
     private String downloadPath;
 
@@ -36,6 +27,5 @@ public class Setting {
      */
     @TableField("setting_maxUploadSpeed")
     private long maxUploadSpeed;
-
 
 }
