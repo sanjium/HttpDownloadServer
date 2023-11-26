@@ -53,5 +53,20 @@ public class File {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime fileModifiedTime;
 
+    @TableField("file_isdirectory")
+    private boolean fileIsDirectory;
 
+    /**
+     * 文件路径
+     */
+
+    @TableField("file_path")
+    private String filePath;
+
+    @TableField("file_filter")
+    private String filefilter;
+
+
+    public File(String fileName, boolean fileIsDirectory,String filePath, LocalDateTime fileCreatTime) {
+    }
 }

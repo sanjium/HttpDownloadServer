@@ -1,16 +1,15 @@
 package com.download.controller;
 
 
+import com.download.aop.LogAnnotation;
+import com.download.entity.ResponseResult;
 import com.download.entity.domain.File;
-
 import com.download.server.FileService;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
-import java.util.Collection;
-import java.util.Collections;
+import java.io.FilePermission;
 import java.util.List;
-import java.util.Random;
+
 
 @RestController
 @RequestMapping("/file")
@@ -20,33 +19,24 @@ public class FileController {
     private FileService fileService;
 
     @GetMapping("/fetchFileList")
-    public List<File> fetchFileList(){
-        List<File> fileList=fileService.getAll();
-        if(fileList==null){
-            return null;
-        }
-        if(fileList.size()>0){
-           return fileList;
-        }
-        return null;
+    @LogAnnotation(operation = "返回文件列表")
+    public ResponseResult fetchFileList(@RequestBody List<Long> fileId){
+        return fileService.fetchFileList(fileId);
+    }
+
+    @GetMapping("/fetchFilterFile")
+    @LogAnnotation(operation = "查看文件")
+    public ResponseResult fetchFilterFile(@RequestBody Long fileId,@RequestBody String filePath,@RequestBody String filter){
+        return fileService.fetchFilterFile(fileId,filePath,filter);
     }
 
     /*
     内存从小到大
      */
-    @GetMapping("/sortFileList")
-    @ResponseBody
-    public List<File> sortFileList(String fileSize){
-        List<File> fileList=fileService.getAll();
-        if(fileList.size()>0){
-           for(int i=0;i< fileList.size();i++){
-               if(Integer.parseInt(fileList.get(i).getFileSize()) >
-                       Integer.parseInt(fileList.get(i + 1).getFileSize())) {
-                   Collections.swap(fileList,i,i+1);
-               }
-           }
-        }
-        return fileList;
+    @PostMapping("/sortFileList")
+    @LogAnnotation(operation = "文件排序")
+    public ResponseResult sortFileList(@RequestBody Long fileId,@RequestBody String filePath,@RequestBody String sort){
+        return fileService.sortFileList(fileId,filePath,sort);
     }
 
 }
