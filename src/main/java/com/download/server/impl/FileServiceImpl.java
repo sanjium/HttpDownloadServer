@@ -8,6 +8,7 @@ import com.download.server.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,11 +16,12 @@ import java.util.List;
 public class FileServiceImpl extends ServiceImpl<FileMapper,File> implements FileService {
 
     final FileMapper fileMapper;
+
     @Autowired
     private FileService fileService;
 
-    public FileServiceImpl(FileMapper fileMapper) {
-        this.fileMapper = fileMapper;
+    @Autowired
+    public FileServiceImpl(FileMapper fileMapper) {this.fileMapper = fileMapper;
     }
 
 
@@ -58,5 +60,6 @@ public class FileServiceImpl extends ServiceImpl<FileMapper,File> implements Fil
         fileService.sortFileList(fileId, file.getFilePath(),sort);
         return ResponseResult.ok("文件排序");
     }
+
 
 }

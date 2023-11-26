@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 @TableName("download_file")
 public class File {
 
-
     @TableId(value="file_id", type = IdType.AUTO)
     private long fileId;
 
