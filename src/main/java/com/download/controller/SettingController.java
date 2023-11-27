@@ -1,9 +1,9 @@
 package com.download.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.download.aop.LogAnnotation;
 import com.download.entity.ResponseResult;
 import com.download.entity.domain.Setting;
-import com.download.entity.dto.SettingDTO;
 
 import com.download.server.SettingService;
 
@@ -11,6 +11,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+
+import java.util.List;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -20,15 +22,14 @@ public class SettingController {
     @Resource
     private SettingService settingService;
 
-    @GetMapping("/{id}")
+    @GetMapping()
     @LogAnnotation(operation = "返回")
-    public ResponseResult<SettingDTO> fetchSettings(@PathVariable Long id ){
-        Setting setting = settingService.getById(id);
-        SettingDTO settingDTO = new SettingDTO();
-        BeanUtils.copyProperties(setting,settingDTO);
-        return ResponseResult.ok(settingDTO);
+    public ResponseResult<List<Setting>> fetchSettings(){
+        Page<Setting> page = new Page<>();
+        page.setSize(2);
+        Page<Setting> page1 = settingService.page(page);
+        return ResponseResult.ok(page1.getRecords());
     }
-
 
     @PostMapping("/saveSettings")
     @ResponseBody

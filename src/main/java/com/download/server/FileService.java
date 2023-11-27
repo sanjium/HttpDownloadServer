@@ -13,5 +13,7 @@ public interface FileService  extends IService<File>{
 
     ResponseResult fetchFilterFile(Long fileId, String filePaths, String filter);
 
-    ResponseResult sortFileList(Long FileId,String filePath,String sort);
+    ResponseResult getByPath();
+
+//    ResponseResult sortFileList(Long FileId,String filePath,String sort);
 }

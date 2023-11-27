@@ -20,8 +20,9 @@ public class FileController {
 
     @GetMapping("/fetchFileList")
     @LogAnnotation(operation = "返回文件列表")
-    public ResponseResult fetchFileList(@RequestBody List<Long> fileId){
-        return fileService.fetchFileList(fileId);
+    public ResponseResult fetchFileList(String path){
+
+        return fileService.getByPath();
     }
 
     @GetMapping("/fetchFilterFile")
@@ -36,7 +37,7 @@ public class FileController {
     @PostMapping("/sortFileList")
     @LogAnnotation(operation = "文件排序")
     public ResponseResult sortFileList(@RequestBody Long fileId,@RequestBody String filePath,@RequestBody String sort){
-        return fileService.sortFileList(fileId,filePath,sort);
+        return null;
     }
 
 }
