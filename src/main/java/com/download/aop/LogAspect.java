@@ -22,6 +22,7 @@ import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 
 @Component
@@ -60,7 +61,10 @@ public class LogAspect {
             recordLog(joinPoint, myLog, runTime);
             throw e;
         } finally {
-            logService.save(myLog);
+            // 将保存日志的操作异步执行
+            CompletableFuture.runAsync(() -> {
+                logService.save(myLog);
+            });
         }
         return result;
     }
