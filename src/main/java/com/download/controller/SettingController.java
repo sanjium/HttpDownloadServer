@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
-import static org.springframework.http.ResponseEntity.ok;
+
 
 @RestController
 @RequestMapping("/setting")
