@@ -26,3 +26,4 @@ mybatis-plus:
 #      map-underscore-to-camel-case: false
 server:
   port: 8080
+

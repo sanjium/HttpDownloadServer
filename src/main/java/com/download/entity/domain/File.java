@@ -16,57 +16,20 @@ import java.time.LocalDateTime;
 @TableName("download_file")
 public class File {
 
-
-    @TableId(value="file_id", type = IdType.AUTO)
-    private long fileId;
-
-    /**
-     * 文件名
-     */
     @TableField("file_name")
-    private String fileName;
-
-
-    /**
-     * 文件类型
-     */
-    @TableField("file_type")
-    private String filetype;
-
-    /**
-     * 文件大小
-     */
-    @TableField("file_size")
-    private String fileSize;
-
-    /**
-     * 创建时间
-     */
-    @TableField("file_creattime")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime fileCreatTime;
-
-    /**
-     * 修改时间
-     */
-    @TableField("file_modified")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime fileModifiedTime;
+    private String name;
 
     @TableField("file_isdirectory")
-    private boolean fileIsDirectory;
-
-    /**
-     * 文件路径
-     */
+    private boolean isDirectory;
 
     @TableField("file_path")
-    private String filePath;
+    private String path;
 
-    @TableField("file_filter")
-    private String filefilter;
+    @TableField("file_size")
+    private String size;
 
+    @TableField("file_creattime")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createAt;
 
-    public File(String fileName, boolean fileIsDirectory,String filePath, LocalDateTime fileCreatTime) {
-    }
 }

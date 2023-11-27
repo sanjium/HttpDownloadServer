@@ -14,9 +14,6 @@ import lombok.NoArgsConstructor;
 @TableName("download_setting")
 public class Setting {
 
-    @TableId(value = "download_settingid", type = IdType.AUTO)
-    private long settingId;
-
     @TableField("setting_downloadpath")
     private String downloadPath;
 
