@@ -26,10 +26,16 @@ public class Transfer {
     private String type;
 
     /*
-     * 下载任务状态(0为暂停,1为下载)
+     * 下载链接(当type为http必填)
+     * */
+    @TableField("url")
+    private String url;
+
+    /*
+     * 下载任务状态
      * */
     @TableField("status")
-    private Integer status;
+    private String status;
 
     /*
      * 下载任务名称
@@ -38,40 +44,55 @@ public class Transfer {
     private String name;
 
     /*
-     * 当前下载进度
+     * 当前下载进度(当前下载量/总量)
      * */
-    @TableField("current_progress")
-    private String currentProgress;
+    @TableField("progress")
+    private String progress;
 
     /*
-     * 总下载量
+     * 当前下载量
      * */
-    @TableField("total_progress")
-    private String totalProgress;
+    @TableField("speed")
+    private String speed;
+
+    @TableField("size")
+    private String size;
 
     /*
      * 当前下载速度
      * */
-    @TableField("current_download_speed")
-    private String currentDownloadSpeed;
+    @TableField("download_speed")
+    private String downloadSpeed;
+
+    /*
+     * 上传速度(当type为bt时 必填)
+     * */
+    @TableField("upload_speed")
+    private String uploadSpeed;
 
     /*
      * 线程数
      * */
-    @TableField("thread_count")
-    private Integer threadCount;
+    @TableField("threads")
+    private Integer threads;
 
     /*
      * 运行时间
      * */
-    @TableField("run_time")
-    private String runTime;
+    @TableField("time_left")
+    private String timeLeft;
 
     /*
      * 创建时间
      * */
-    @TableField(value = "create_time", fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
+    @TableField(value = "created_at", fill = FieldFill.INSERT)
+    private LocalDateTime createdAt;
+
+    /*
+     * 完成时间
+     * */
+    @TableField("finished_at")
+    private LocalDateTime finishedAt;
 
     /*
      * 删除标记(0为删除，1为未删除)

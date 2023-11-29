@@ -1,3 +1,6 @@
+const BASE_URL = "http://localhost:8080"
+
+
 /**
  * @returns {Array} 返回所有的设置项
  */
@@ -18,6 +21,7 @@ async function saveSettings(settings) {
     console.log(settings)
     return true
 }
+
 // file 页面 api
 // TODO: 获取文件列表
 // 如果 没有path参数或者参数是/file，就是获取根目录下的文件列表,有payt参数，就是获取path目录下的文件列表
@@ -259,105 +263,23 @@ async function sortFileList(path, sort) {
 }
 
 
-
 // tasks 页面 api
 async function fetchTasks(params) {
-    console.log(params)
+    let total = 0
+    let items = []
+    await fetch(BASE_URL + "/transfer/get_tasks?pageNum=" + params.pos + "&pageSize=" + params.limit, {
+        method: "GET",
+    }).then(data => {
+        return data.json()
+    }).then(response => {
+        if (response.code === 200) {
+            total = response.data.total
+            items = response.data.items
+        }
+    })
     return {
-        total: 6,
-        items: [
-            {
-                id: '111',
-                type: 'http',
-                url: 'https://mirrors.tuna.tsinghua.edu.cn/ubuntu-releases/22.04.3/ubuntu-22.04.3-live-server-arm.iso',
-                name: 'ubuntu-22.04.3-live-server-arm.iso',
-                threads: 2,
-                status: 'downloading',
-                size: '3GB',
-                speed: '2.3MB',
-                progress: '80',
-                createdAt: '2023-11-11',
-                finishedAt: '2023-11-12',
-                timeLeft: '3m 10s',
-                peers: 12,
-                downloadSpeed: '140KB',
-            },
-            {
-                id: '222',
-                type: 'http',
-                url: 'https://mirrors.tuna.tsinghua.edu.cn/ubuntu-releases/22.04.3/ubuntu-22.04.3-live-server-arm.iso',
-                name: 'ubuntu-22.04.3-live-server-arm.iso',
-                status: 'pending',
-                size: '9MB',
-                speed: '1.2MB',
-                progress: '0',
-                createdAt: '2023/11/10 00:00:00',
-                finishedAt: '2023-11-15',
-                peers: 12,
-            },
-            {
-                id: '333',
-                type: 'bt',
-                name: 'ubuntu-22.04.3-live-server-arm.iso',
-                threads: 6,
-                status: 'downloading',
-                size: '2.6GB',
-                speed: '120KB',
-                progress: '50',
-                createdAt: '2023-11-11',
-                finishedAt: '2023-11-12',
-                timeLeft: '3m 2s',
-                peers: 10,
-                uploadSpeed: '198KB',
-                downloadSpeed: '198KB',
-            },
-            {
-                id: '444',
-                type: 'http',
-                url: 'https://mirrors.tuna.tsinghua.edu.cn/ubuntu-releases/22.04.3/ubuntu-22.04.3-live-server-arm.iso',
-                name: 'ubuntu-22.04.3-live-server-arm.iso',
-                status: 'downloaded',
-                size: '9MB',
-                speed: '1.2MB',
-                progress: '100',
-                createdAt: '2023/11/10 00:00:00',
-                finishedAt: '2023-11-15',
-                timeLeft: '1m 20s',
-                peers: 12,
-                downloadSpeed: '1.2MB',
-            },
-            {
-                id: '555',
-                type: 'bt',
-                name: 'ubuntu-22.04.3-live-server-arm.iso',
-                threads: 4,
-                status: 'downloading',
-                size: '2.6GB',
-                speed: '120KB',
-                progress: '10',
-                createdAt: '2023-11-11',
-                finishedAt: '2023-11-12',
-                timeLeft: '3m 2s',
-                peers: 10,
-                uploadSpeed: '198KB',
-                downloadSpeed: '198KB',
-            },
-            {
-                id: '666',
-                type: 'http',
-                url: 'https://mirrors.tuna.tsinghua.edu.cn/ubuntu-releases/22.04.3/ubuntu-22.04.3-live-server-arm.iso',
-                name: 'ubuntu-22.04.3-live-server-arm.iso',
-                status: 'downloaded',
-                size: '9MB',
-                speed: '1.2MB',
-                progress: '100',
-                createdAt: '2023/11/10 00:00:00',
-                finishedAt: '2023-11-15',
-                timeLeft: '1m 20s',
-                peers: 12,
-                downloadSpeed: '1.2MB',
-            }
-        ]
+        total: total,
+        items: items
     }
 }
 

@@ -4,6 +4,7 @@ import com.download.aop.LogAnnotation;
 import com.download.entity.ResponseResult;
 import com.download.entity.domain.Transfer;
 import com.download.server.TransferService;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,8 +49,14 @@ public class TransferController {
 
     @PostMapping("/update_thread")
     @LogAnnotation(module = "任务列表模块", operation = "更改任务下载线程数")
-    public ResponseResult updateThreadTransfer(@RequestParam Long id, @RequestParam Integer count) {
-        return transferService.updateThreadTransfer(id,count);
+    public ResponseResult<String> updateThreadTransfer(@RequestParam Long id, @RequestParam Integer count) {
+        return transferService.updateThreadTransfer(id, count);
+    }
+
+    @GetMapping("/get_tasks")
+    @LogAnnotation(module = "任务列表模块", operation = "获取传输任务列表")
+    public ResponseResult getTasks(@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
+        return transferService.getTasks(pageNum, pageSize);
     }
 
 }

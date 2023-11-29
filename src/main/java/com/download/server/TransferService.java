@@ -15,5 +15,7 @@ public interface TransferService extends IService<Transfer> {
 
     ResponseResult refreshTransfer(List<Long> ids);
 
-    ResponseResult updateThreadTransfer(Long id, Integer count);
+    ResponseResult<String> updateThreadTransfer(Long id, Integer count);
+
+    ResponseResult getTasks(Integer pageNum, Integer pageSize);
 }
