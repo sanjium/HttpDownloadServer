@@ -106,16 +106,4 @@ public class FileServiceImpl implements FileService {
         return date;
     }
 
-    private String getFileExtension(String fileName) {
-        // 获取最后一个点号的位置
-        int dotIndex = fileName.lastIndexOf(".");
-
-        // 如果文件名中没有点号或者点号在文件名的第一个字符位置，那么文件没有后缀名
-        if (dotIndex == -1 || dotIndex == 0 || dotIndex == fileName.length() - 1) {
-            return "";
-        }
-
-        // 截取从最后一个点号之后到文件名末尾的字符串作为后缀名
-        return fileName.substring(dotIndex + 1);
-    }
 }

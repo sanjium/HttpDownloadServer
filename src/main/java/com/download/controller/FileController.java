@@ -40,7 +40,8 @@ public class FileController {
      */
     @PostMapping("/sortFileList")
     @LogAnnotation(operation = "文件排序")
-    public ResponseResult sortFileList(@RequestBody Long fileId,@RequestBody String filePath,@RequestBody String sort){
+    public ResponseResult sortFileList(@RequestParam String filePath,@RequestParam String sort){
+
         return null;
     }
 

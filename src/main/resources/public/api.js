@@ -263,6 +263,37 @@ async function sortFileList(path, sort) {
 }
 
 //file
+async function fetchFilterFile(params) {
+    let name = null
+    let isDirectory = true
+    let path = null
+    let size = null
+    let creatAt = null
+    let children = null
+
+    await fetch(BASE_URL + "/file/fetchFilterFile?path=" + params.path + "&filter=" + params.filter, {
+        method: "GET",
+    }).then(data => {
+        return data.json()
+    }).then(response => {
+        if (response.code === 200) {
+            name = response.data.name
+            isDirectory = response.data.isDirectory
+            path = response.data.path
+            size = response.data.size
+            creatAt = response.data.creatAt
+            children = response.data.children
+        }
+    })
+    return {
+        name: name,
+        isDirectory: isDirectory,
+        path: path,
+        size: size,
+        creatAt: creatAt,
+        children: children
+    }
+}
 
 // tasks 页面 api
 async function fetchTasks(params) {
@@ -283,6 +314,7 @@ async function fetchTasks(params) {
         items: items
     }
 }
+
 
 // 改变线程数
 async function changeThreads(id, threads) {
