@@ -7,14 +7,15 @@ import com.download.entity.domain.Setting;
 
 import com.download.server.SettingService;
 
+import lombok.Data;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
 
-
-
+import java.util.Date;
 import java.util.List;
 
 import static org.springframework.http.ResponseEntity.ok;
@@ -23,7 +24,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping("/setting")
 public class SettingController {
-    @Resource
+    @Autowired
     private SettingService settingService;
 
     @GetMapping()
@@ -38,7 +39,7 @@ public class SettingController {
     @PostMapping("/saveSettings")
     @ResponseBody
     public ResponseResult saveSetting(@RequestBody Setting setting){
-        settingService.save(setting);
+        setting.setCreateAt(new Date());
         return ResponseResult.ok("true");
     }
 }

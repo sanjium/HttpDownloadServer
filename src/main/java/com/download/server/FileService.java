@@ -2,18 +2,12 @@ package com.download.server;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.download.entity.ResponseResult;
-import com.download.entity.domain.File;
-import com.download.mapper.FileMapper;
+import com.download.entity.vo.FileVO;
 
 import java.util.List;
 
-public interface FileService  extends IService<File>{
+public interface FileService{
 
-    ResponseResult fetchFileList(List<Long> fileId);
+    List<FileVO> getFileList(String path, String filter);
 
-    ResponseResult fetchFilterFile(Long fileId, String filePaths, String filter);
-
-    ResponseResult getByPath();
-
-//    ResponseResult sortFileList(Long FileId,String filePath,String sort);
 }

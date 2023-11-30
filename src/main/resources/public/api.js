@@ -262,6 +262,7 @@ async function sortFileList(path, sort) {
     // TODO: 根据sort的值，对path目录下的文件列表进行排序,sort的值有：name, size, createdAt,返回的数据格式和上面的一样，这里我就不写了
 }
 
+//file
 
 // tasks 页面 api
 async function fetchTasks(params) {
