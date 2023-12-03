@@ -271,7 +271,8 @@ async function fetchFilterFile(params) {
     let creatAt = null
     let children = null
 
-    await fetch(BASE_URL + "/file/fetchFilterFile?path=" + params.path + "&filter=" + params.filter, {
+    await fetch(BASE_URL + "/file/fetch_filter_file?path=" +
+        "" + params.path + "&filter=" + params.filter, {
         method: "GET",
     }).then(data => {
         return data.json()
@@ -295,6 +296,25 @@ async function fetchFilterFile(params) {
     }
 }
 
+//sort
+async function sortFileList(params) {
+    let path = null
+    let sort = null
+    await fetch(BASE_URL + "/file/sort_file_list?path=" + params.path + "&sort=" + params.sort, {
+        method: "POST",
+    }).then(data => {
+        return data.json()
+    }).then(response => {
+        if (response.code === 200) {
+            path = response.data.path
+            sort = response.data.sort
+        }
+    })
+    return {
+        total: path,
+        items: sort
+    }
+}
 // tasks 页面 api
 async function fetchTasks(params) {
     let total = 0
