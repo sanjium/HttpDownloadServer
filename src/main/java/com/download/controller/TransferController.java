@@ -37,7 +37,6 @@ public class TransferController {
     @LogAnnotation(module = "任务列表模块", operation = "删除任务")
     public ResponseResult deleteTransfer(@RequestParam List<Long> ids) {
         return transferService.deleteTransfer(ids);
-
     }
 
     @PostMapping("/refresh")
@@ -56,6 +55,12 @@ public class TransferController {
     @GetMapping("/get_tasks")
     @LogAnnotation(module = "任务列表模块", operation = "获取传输任务列表")
     public ResponseResult getTasks(@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
+        return transferService.getTasks(pageNum, pageSize);
+    }
+
+    @GetMapping("/get_filter_tasks")
+    @LogAnnotation(module = "任务列表模块", operation = "获取过滤后的传输任务列表")
+    public ResponseResult getFilterTasks(@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
         return transferService.getTasks(pageNum, pageSize);
     }
 

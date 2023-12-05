@@ -318,8 +318,17 @@ async function fetchTasks(params) {
 
 // 改变线程数
 async function changeThreads(id, threads) {
-    console.log(id, threads)
-    return true
+    let isSuccess = false
+    await fetch(BASE_URL + "/transfer/update_thread?id=" + id + "&count=" + threads, {
+        method: "POST",
+    }).then(data => {
+        return data.json()
+    }).then(response => {
+        if (response.code === 200) {
+            isSuccess = true
+        }
+    })
+    return isSuccess
 }
 
 async function submitDownloadPath(path) {
@@ -330,157 +339,102 @@ async function submitDownloadPath(path) {
 // 重新下载任务的详细信息，ids是一个数组，单个任务，就是一个元素的数组，多个任务就是多个元素的数组，实现同一个接口单量和多量的处理
 async function fetchTaskInfo(ids) {
     console.log(ids, '刷新，重新获取任务的详细信息')
-    // return {
-    //     id: 'refreshed_id',
-    //     type: 'http',
-    //     url: 'https://mirrors.tuna.tsinghua.edu.cn/ubuntu-releases/22.04.3/ubuntu-22.04.3-live-server-arm.iso',
-    //     name: 'ubuntu-22.04.3-live-server-arm.iso',
-    //     status: 'downloading',
-    //     size: '3GB',
-    //     speed: '2.3MB',
-    //     progress: '80',
-    //     createdAt: '2023-11-11',
-    //     finishedAt: '2023-11-12',
-    //     timeLeft: '3m 10s',
-    //     peers: 12,
-    //     downloadSpeed: '140KB',
-    // }
+    let isRefresh = false
+    await fetch(BASE_URL + "/transfer/refresh?ids=" + ids, {
+        method: "POST",
+    }).then(data => {
+        return data.json()
+    }).then(response => {
+        if (response.code === 200) {
+            isRefresh = true
+            location.reload()
+        }
+    })
+    return isRefresh
 }
 
 // 暂停下载任务,ids是一个数组，单个任务，就是一个元素的数组，多个任务就是多个元素的数组，实现同一个接口单量和多量的处理
 async function pauseTask(ids) {
-    console.log(ids)
+    console.log(ids, '刷新，重新获取任务的详细信息')
+
+    await fetch(BASE_URL + "/transfer/pause?ids=" + ids, {
+        method: "POST",
+    }).then(data => {
+        return data.json()
+    }).then(response => {
+        if (response.code === 200) {
+            location.reload()
+        }
+    })
     return true
 }
 
 // 恢复下载任务，ids是一个数组
 async function resumeTask(ids) {
-    console.log(ids)
+    console.log(ids, '刷新，重新获取任务的详细信息')
+
+    await fetch(BASE_URL + "/transfer/pause?ids=" + ids, {
+        method: "POST",
+    }).then(data => {
+        return data.json()
+    }).then(response => {
+        if (response.code === 200) {
+            location.reload()
+        }
+    })
     return true
 }
 
 // 删除下载任务，ids是一个数组
 async function deleteTask(ids) {
-    console.log(ids)
+    console.log(ids, '刷新，重新获取任务的详细信息')
+
+    await fetch(BASE_URL + "/transfer/delete?ids=" + ids, {
+        method: "POST",
+    }).then(data => {
+        return data.json()
+    }).then(response => {
+        if (response.code === 200) {
+            location.reload()
+        }
+    })
     return true
 }
 
 // 对任务的状态进行过滤选择,如果是all 的情况下，就返回所有的数据，默认是all 的情况
 async function fetchFilterTasks(filter) {
+    console.log(filter)
+    let total = 0
+    let items = []
     if (filter === 'all') {
+        await fetch(BASE_URL + "/transfer/get_tasks?pageNum=0&pageSize=5" , {
+            method: "GET",
+        }).then(data => {
+            return data.json()
+        }).then(response => {
+            if (response.code === 200) {
+                total = response.data.total
+                items = response.data.items
+            }
+        })
         return {
-            total: 6,
-            items: [
-                {
-                    id: '111',
-                    type: 'http',
-                    url: 'https://mirrors.tuna.tsinghua.edu.cn/ubuntu-releases/22.04.3/ubuntu-22.04.3-live-server-arm.iso',
-                    name: 'ubuntu-22.04.3-live-server-arm.iso',
-                    status: 'downloading',
-                    size: '3GB',
-                    speed: '2.3MB',
-                    progress: '80',
-                    createdAt: '2023-11-11',
-                    finishedAt: '2023-11-12',
-                    timeLeft: '3m 10s',
-                    peers: 12,
-                    downloadSpeed: '140KB',
-                },
-                {
-                    id: '222',
-                    type: 'http',
-                    url: 'https://mirrors.tuna.tsinghua.edu.cn/ubuntu-releases/22.04.3/ubuntu-22.04.3-live-server-arm.iso',
-                    name: 'ubuntu-22.04.3-live-server-arm.iso',
-                    status: 'pending',
-                    size: '9MB',
-                    speed: '1.2MB',
-                    progress: '0',
-                    createdAt: '2023/11/10 00:00:00',
-                    finishedAt: '2023-11-15',
-                    peers: 12,
-                },
-                {
-                    id: '333',
-                    type: 'bt',
-                    name: 'ubuntu-22.04.3-live-server-arm.iso',
-                    status: 'downloading',
-                    size: '2.6GB',
-                    speed: '120KB',
-                    progress: '10',
-                    createdAt: '2023-11-11',
-                    finishedAt: '2023-11-12',
-                    timeLeft: '3m 2s',
-                    peers: 10,
-                    uploadSpeed: '198KB',
-                    downloadSpeed: '198KB',
-                },
-                {
-                    id: '444',
-                    type: 'http',
-                    url: 'https://mirrors.tuna.tsinghua.edu.cn/ubuntu-releases/22.04.3/ubuntu-22.04.3-live-server-arm.iso',
-                    name: 'ubuntu-22.04.3-live-server-arm.iso',
-                    status: 'downloaded',
-                    size: '9MB',
-                    speed: '1.2MB',
-                    progress: '100',
-                    createdAt: '2023/11/10 00:00:00',
-                    finishedAt: '2023-11-15',
-                    timeLeft: '1m 20s',
-                    peers: 12,
-                    downloadSpeed: '1.2MB',
-                },
-                {
-                    id: '555',
-                    type: 'bt',
-                    name: 'ubuntu-22.04.3-live-server-arm.iso',
-                    status: 'downloading',
-                    size: '2.6GB',
-                    speed: '120KB',
-                    progress: '10',
-                    createdAt: '2023-11-11',
-                    finishedAt: '2023-11-12',
-                    timeLeft: '3m 2s',
-                    peers: 10,
-                    uploadSpeed: '198KB',
-                    downloadSpeed: '198KB',
-                },
-                {
-                    id: '666',
-                    type: 'http',
-                    url: 'https://mirrors.tuna.tsinghua.edu.cn/ubuntu-releases/22.04.3/ubuntu-22.04.3-live-server-arm.iso',
-                    name: 'ubuntu-22.04.3-live-server-arm.iso',
-                    status: 'downloaded',
-                    size: '9MB',
-                    speed: '1.2MB',
-                    progress: '100',
-                    createdAt: '2023/11/10 00:00:00',
-                    finishedAt: '2023-11-15',
-                    timeLeft: '1m 20s',
-                    peers: 12,
-                    downloadSpeed: '1.2MB',
-                }
-            ]
+            total: total,
+            items: items
         }
     } else {
+        await fetch(BASE_URL + "/transfer/get_tasks?pageNum=0&pageSize=5" , {
+            method: "GET",
+        }).then(data => {
+            return data.json()
+        }).then(response => {
+            if (response.code === 200) {
+                total = response.data.total
+                items = response.data.items
+            }
+        })
         return {
-            total: 1,
-            items: [
-                {
-                    id: '111',
-                    type: 'http',
-                    url: 'https://mirrors.tuna.tsinghua.edu.cn/ubuntu-releases/22.04.3/ubuntu-22.04.3-live-server-arm.iso',
-                    name: 'mock过滤后的数据',
-                    status: 'downloading',
-                    size: '3GB',
-                    speed: '2.3MB',
-                    progress: '80',
-                    createdAt: '2023-11-11',
-                    finishedAt: '2023-11-12',
-                    timeLeft: '3m 10s',
-                    peers: 12,
-                    downloadSpeed: '140KB',
-                }
-            ]
+            total: total,
+            items: items
         }
     }
 }
