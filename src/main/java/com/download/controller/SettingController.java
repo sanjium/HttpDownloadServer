@@ -36,10 +36,11 @@ public class SettingController {
         return ResponseResult.ok(page1.getRecords());
     }
 
-    @PostMapping("/saveSettings")
+    @PostMapping("/savesettings")
     @ResponseBody
     public ResponseResult saveSetting(@RequestBody Setting setting){
         setting.setCreateAt(new Date());
+        settingService.save(setting);
         return ResponseResult.ok("true");
     }
 }
