@@ -422,12 +422,12 @@ async function deleteTask(ids) {
 }
 
 // 对任务的状态进行过滤选择,如果是all 的情况下，就返回所有的数据，默认是all 的情况
-async function fetchFilterTasks(filter) {
+async function fetchFilterTasks(filter, pos, limit,currentPage) {
     console.log(filter)
     let total = 0
     let items = []
     if (filter === 'all') {
-        await fetch(BASE_URL + "/transfer/get_tasks?pageNum=0&pageSize=5" , {
+        await fetch(BASE_URL + "/transfer/get_tasks?pageNum=0&pageSize=5", {
             method: "GET",
         }).then(data => {
             return data.json()
@@ -442,7 +442,7 @@ async function fetchFilterTasks(filter) {
             items: items
         }
     } else {
-        await fetch(BASE_URL + "/transfer/get_tasks?pageNum=0&pageSize=5" , {
+        await fetch(BASE_URL + "/transfer/get_tasks?pageNum=0&pageSize=5", {
             method: "GET",
         }).then(data => {
             return data.json()
