@@ -6,6 +6,6 @@ import com.download.entity.vo.SettingVO;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface SettingMapper extends BaseMapper<SettingVO> {
+public interface SettingMapper extends BaseMapper<Setting> {
 
 }

@@ -12,9 +12,6 @@ import com.download.server.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -32,10 +29,11 @@ public class FileController {
     @GetMapping("/fetch_filter_file")
     @LogAnnotation(operation = "查看文件")
     public ResponseResult fetchFilterFile(@RequestParam String path, @RequestParam String filter) {
-        LambdaQueryWrapper<SettingVO> wrapper = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<Setting> wrapper = new LambdaQueryWrapper<>();
         String pathOne = settingService.getOne(wrapper).getDownloadPath();
         Path path1 = Paths.get(path);
         Path path2 = Paths.get(pathOne);
+        //获取父目录（根目录）
         Path parent = path1.toAbsolutePath().getRoot();
         if(!parent.equals(path2)){
             return null;

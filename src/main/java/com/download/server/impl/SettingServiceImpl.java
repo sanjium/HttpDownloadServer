@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class SettingServiceImpl extends ServiceImpl<SettingMapper, SettingVO> implements SettingService {
+public class SettingServiceImpl extends ServiceImpl<SettingMapper, Setting> implements SettingService {
     @Autowired
     private SettingMapper settingMapper;
 

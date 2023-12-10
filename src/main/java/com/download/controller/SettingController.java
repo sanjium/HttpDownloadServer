@@ -8,12 +8,8 @@ import com.download.entity.domain.Setting;
 import com.download.entity.vo.SettingVO;
 import com.download.server.SettingService;
 
-import lombok.Data;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.Resource;
 
 
 import java.util.ArrayList;
@@ -31,10 +27,10 @@ public class SettingController {
 
     @GetMapping()
     @LogAnnotation(operation = "返回")
-    public ResponseResult<List<SettingVO>> fetchSettings(){
-        Page<SettingVO> page = new Page<>();
+    public ResponseResult<List<Setting>> fetchSettings(){
+        Page<Setting> page = new Page<>();
         page.setSize(2);
-        Page<SettingVO> page1 = settingService.page(page);
+        Page<Setting> page1 = settingService.page(page);
         return ResponseResult.ok(page1.getRecords());
     }
 
