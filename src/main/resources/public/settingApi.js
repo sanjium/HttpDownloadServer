@@ -2,12 +2,23 @@ const BASE_URL = "http://localhost:8080"
 
 // 设置页面 api,下面是需要返回给我的数据格式
 async function fetchSettings() {
-    return {
-        downloadPath: '/data/mock_dir',
-        maxTasks: 4,
-        maxDownloadSpeed: 10,
-        maxUploadSpeed: 12
-    }
+    const resp = await fetch(`${BASE_URL}/setting`, {
+        // const resp = await fetch("https://v1.hitokoto.cn?c=i", {  //示例一言是可以的
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+    console.log(resp, 'resp')
+    const data = await resp.json()
+    console.log(data, 'data json')
+    return data.data
+    // return {
+    //     downloadPath: '/data/mock_dir',
+    //     maxTasks: 4,
+    //     maxDownloadSpeed: 10,
+    //     maxUploadSpeed: 12
+    // }
 }
 
 
@@ -23,151 +34,164 @@ async function saveSettings(settings) {
 
 async function fetchFileList(path, filter) {
     console.log(path, filter)
-    if (filter === undefined) {
-        if (path === undefined || path === '/file') {
-            return [
-                {
-                    name: 'Test1',
-                    isDirectory: true,
-                    path: '/data/mock_dir/test1',
-                    createdAt: '2023-11-11',
-                    children: [
-                        {
-                            name: 'Test1-1',
-                            isDirectory: true,
-                            path: '/test1-1',
-                            size: null,
-                            createdAt: '2023-11-11',
-                            children: [{
-                                name: 'Test1-1-1',
-                                isDirectory: true,
-                                path: '/test1-1-1',
-                                size: '100KB',
-                                createdAt: '2023-11-11',
-                                children: [{
-                                    name: 'Test1-1-1-1',
-                                    isDirectory: false,
-                                    type: 'txt',
-                                    path: '/test1-1-1-1',
-                                    size: '100KB',
-                                    createdAt: '2023-11-11'
-                                }]
-                            }]
-                        },
-                        {
-                            name: 'Test1-2.pdf',
-                            isDirectory: false,
-                            type: 'pdf',
-                            path: '/test1-2',
-                            size: '100KB',
-                            createdAt: '2023-11-11'
-                        }]
-                },
-                {
-                    name: 'Test2.txt',
-                    isDirectory: false,
-                    type: 'txt',
-                    path: '/data/mock_dir/test2',
-                    size: '20KB',
-                    createdAt: '2023-11-13'
-                },
-                {
-                    name: 'Test3.gif',
-                    isDirectory: false,
-                    type: 'gif',
-                    path: '/data/mock_dir/test3',
-                    size: '1MB',
-                    createdAt: '2023-11-12'
-                },
-            ]
-        }
-        if (path === '/data/mock_dir/test1') {
-            return [
-                {
-                    name: 'Test1-1',
-                    isDirectory: true,
-                    path: '/test1-1',
-                    size: null,
-                    createdAt: '2023-11-11',
-                    children: [{
-                        name: 'Test1-1-1',
-                        isDirectory: true,
-                        path: '/test1-1-1',
-                        size: '100KB',
-                        createdAt: '2023-11-11',
-                        children: [{
-                            name: 'Test1-1-1-1',
-                            isDirectory: false,
-                            type: 'txt',
-                            path: '/test1-1-1-1',
-                            size: '100KB',
-                            createdAt: '2023-11-11'
-                        }]
-                    }]
-                },
-                {
-                    name: 'Test1-2.pdf',
-                    isDirectory: false,
-                    type: 'pdf',
-                    path: '/test1-2',
-                    size: '100KB',
-                    createdAt: '2023-11-11'
-                }]
-        }
-        if (path === '/data/mock_dir/test2') {
-            return [
-                {
-                    name: 'Test2.txt',
-                    isDirectory: false,
-                    type: 'txt',
-                    path: '/data/mock_dir/test2',
-                    size: '20KB',
-                    createdAt: '2023-11-13'
-                }
-            ]
-        }
-        if (path === '/test1-1') {
-            return [
-                {
-                    name: 'Test1-1-1',
-                    isDirectory: true,
-                    path: '/test1-1-1',
-                    size: '100KB',
-                    createdAt: '2023-11-11',
-                    children: [{
-                        name: 'Test1-1-1-1',
-                        isDirectory: false,
-                        type: 'txt',
-                        path: '/test1-1-1-1',
-                        size: '100KB',
-                        createdAt: '2023-11-11'
-                    }]
-                }
-            ]
-        }
-        if (path === '/test1-1-1') {
-            return [
-                {
-                    name: 'Test1-1-1-1',
-                    isDirectory: false,
-                    type: 'txt',
-                    path: '/test1-1-1-1',
-                    size: '100KB',
+    const resp = await fetch(`${BASE_URL}/file/fetch_filter_file?path=/新建文件夹 (17)&filter=document`, {
+        // const resp = await fetch("https://v1.hitokoto.cn?c=i", {  //示例一言是可以的
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(path,filter)
+    })
+    console.log(resp, 'resp')
+    const data = await resp.json()
+    console.log(data, 'data json')
+    return data.data
+    // if (filter === undefined) {
+    //     if (path === undefined || path === '/file') {
+    //         return [
+    //             {
+    //                 name: 'Test1',
+    //                 isDirectory: true,
+    //                 path: '/data/mock_dir/test1',
+    //                 createdAt: '2023-11-11',
+    //                 children: [
+    //                     {
+    //                         name: 'Test1-1',
+    //                         isDirectory: true,
+    //                         path: '/test1-1',
+    //                         size: null,
+    //                         createdAt: '2023-11-11',
+    //                         children: [{
+    //                             name: 'Test1-1-1',
+    //                             isDirectory: true,
+    //                             path: '/test1-1-1',
+    //                             size: '100KB',
+    //                             createdAt: '2023-11-11',
+    //                             children: [{
+    //                                 name: 'Test1-1-1-1',
+    //                                 isDirectory: false,
+    //                                 type: 'txt',
+    //                                 path: '/test1-1-1-1',
+    //                                 size: '100KB',
+    //                                 createdAt: '2023-11-11'
+    //                             }]
+    //                         }]
+    //                     },
+    //                     {
+    //                         name: 'Test1-2.pdf',
+    //                         isDirectory: false,
+    //                         type: 'pdf',
+    //                         path: '/test1-2',
+    //                         size: '100KB',
+    //                         createdAt: '2023-11-11'
+    //                     }]
+    //             },
+    //             {
+    //                 name: 'Test2.txt',
+    //                 isDirectory: false,
+    //                 type: 'txt',
+    //                 path: '/data/mock_dir/test2',
+    //                 size: '20KB',
+    //                 createdAt: '2023-11-13'
+    //             },
+    //             {
+    //                 name: 'Test3.gif',
+    //                 isDirectory: false,
+    //                 type: 'gif',
+    //                 path: '/data/mock_dir/test3',
+    //                 size: '1MB',
+    //                 createdAt: '2023-11-12'
+    //             },
+    //         ]
+    //     }
+    //     if (path === '/data/mock_dir/test1') {
+    //         return [
+    //             {
+    //                 name: 'Test1-1',
+    //                 isDirectory: true,
+    //                 path: '/test1-1',
+    //                 size: null,
+    //                 createdAt: '2023-11-11',
+    //                 children: [{
+    //                     name: 'Test1-1-1',
+    //                     isDirectory: true,
+    //                     path: '/test1-1-1',
+    //                     size: '100KB',
+    //                     createdAt: '2023-11-11',
+    //                     children: [{
+    //                         name: 'Test1-1-1-1',
+    //                         isDirectory: false,
+    //                         type: 'txt',
+    //                         path: '/test1-1-1-1',
+    //                         size: '100KB',
+    //                         createdAt: '2023-11-11'
+    //                     }]
+    //                 }]
+    //             },
+    //             {
+    //                 name: 'Test1-2.pdf',
+    //                 isDirectory: false,
+    //                 type: 'pdf',
+    //                 path: '/test1-2',
+    //                 size: '100KB',
+    //                 createdAt: '2023-11-11'
+    //             }]
+    //     }
+    //     if (path === '/data/mock_dir/test2') {
+    //         return [
+    //             {
+    //                 name: 'Test2.txt',
+    //                 isDirectory: false,
+    //                 type: 'txt',
+    //                 path: '/data/mock_dir/test2',
+    //                 size: '20KB',
+    //                 createdAt: '2023-11-13'
+    //             }
+    //         ]
+    //     }
+    //     if (path === '/test1-1') {
+    //         return [
+    //             {
+    //                 name: 'Test1-1-1',
+    //                 isDirectory: true,
+    //                 path: '/test1-1-1',
+    //                 size: '100KB',
+    //                 createdAt: '2023-11-11',
+    //                 children: [{
+    //                     name: 'Test1-1-1-1',
+    //                     isDirectory: false,
+    //                     type: 'txt',
+    //                     path: '/test1-1-1-1',
+    //                     size: '100KB',
+    //                     createdAt: '2023-11-11'
+    //                 }]
+    //             }
+    //         ]
+    //     }
+    //     if (path === '/test1-1-1') {
+    //         return [
+    //             {
+    //                 name: 'Test1-1-1-1',
+    //                 isDirectory: false,
+    //                 type: 'txt',
+    //                 path: '/test1-1-1-1',
+    //                 size: '100KB',
+    //
+    //                 createdAt: '2023-11-11'
+    //             }
+    //         ]
+    //     }
+    // } else {
+    //     return {
+    //         name: 'test.测试用例类型',
+    //         isDirectory: false,
+    //         type: '测试用例类型',
+    //         path: '/data/mock_dir/test3',
+    //         size: '1MB',
+    //         createdAt: '2023-11-12'
+    //     }
+    // }
 
-                    createdAt: '2023-11-11'
-                }
-            ]
-        }
-    } else {
-        return {
-            name: 'test.测试用例类型',
-            isDirectory: false,
-            type: '测试用例类型',
-            path: '/data/mock_dir/test3',
-            size: '1MB',
-            createdAt: '2023-11-12'
-        }
-    }
 }
 
 //  TODO: 查找符合path的文件，然后根据filter进行过滤

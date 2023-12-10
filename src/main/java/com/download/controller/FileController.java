@@ -6,6 +6,7 @@ import com.download.aop.LogAnnotation;
 import com.download.entity.ResponseResult;
 import com.download.entity.domain.Setting;
 import com.download.entity.vo.FileVO;
+import com.download.entity.vo.SettingVO;
 import com.download.server.FileService;
 import com.download.server.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class FileController {
     @GetMapping("/fetch_filter_file")
     @LogAnnotation(operation = "查看文件")
     public ResponseResult fetchFilterFile(@RequestParam String path, @RequestParam String filter) {
-        LambdaQueryWrapper<Setting> wrapper = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<SettingVO> wrapper = new LambdaQueryWrapper<>();
         String pathOne = settingService.getOne(wrapper).getDownloadPath();
         Path path1 = Paths.get(path);
         Path path2 = Paths.get(pathOne);

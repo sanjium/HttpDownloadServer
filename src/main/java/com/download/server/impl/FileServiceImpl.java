@@ -103,7 +103,7 @@ public class FileServiceImpl implements FileService {
         Map<String,String> filterParms = new HashMap<>();
         filterParms.put("document",".doc");
         filterParms.put("archive",".zip");
-        filterParms.put("video",".doc");
+        filterParms.put("video",".mp4");
         File directory = new File(path);
         File[] fileList = directory.listFiles();
         List<File> fileLists = new ArrayList<>();
