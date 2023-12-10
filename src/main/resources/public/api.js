@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8080"
+const BASE_URL = "http://43.248.191.29:8585"
 
 
 /**
@@ -427,7 +427,7 @@ async function fetchFilterTasks(filter, pos, limit,currentPage) {
     let total = 0
     let items = []
     if (filter === 'all') {
-        await fetch(BASE_URL + "/transfer/get_tasks?pageNum=0&pageSize=5", {
+        await fetch(BASE_URL + "/transfer/get_tasks?pageNum="+currentPage+"&pageSize="+limit, {
             method: "GET",
         }).then(data => {
             return data.json()
