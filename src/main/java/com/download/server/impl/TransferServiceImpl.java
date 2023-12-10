@@ -76,6 +76,8 @@ public class TransferServiceImpl extends ServiceImpl<TransferMapper, Transfer> i
 
     @Override
     public ResponseResult updateThreadTransfer(Long id, Integer count) {
+        System.out.println(id);
+        System.out.println(count);
         Transfer transfer = transferMapper.selectById(id);
         transfer.setThreads(count);
         boolean isUpdate = updateById(transfer);
@@ -90,6 +92,18 @@ public class TransferServiceImpl extends ServiceImpl<TransferMapper, Transfer> i
     @Override
     public ResponseResult getTasks(Integer pageNum, Integer pageSize) {
         LambdaQueryWrapper<Transfer> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        Page<Transfer> page = new Page<>(pageNum, pageSize);
+        page(page, lambdaQueryWrapper);
+        List<Transfer> records = page.getRecords();
+        Integer total = records.size();
+        GetTasksVO getTasksVO = new GetTasksVO(total, records);
+        return ResponseResult.ok(getTasksVO);
+    }
+
+    @Override
+    public ResponseResult getFilterTasks(Integer pageNum, Integer pageSize, String filter) {
+        LambdaQueryWrapper<Transfer> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Transfer::getStatus, filter);
         Page<Transfer> page = new Page<>(pageNum, pageSize);
         page(page, lambdaQueryWrapper);
         List<Transfer> records = page.getRecords();

@@ -1,15 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.js" defer></script>
+    <script src="./assets/tailwind-3.3.2.js"></script>
+    <script type="module" src="./assets/alpine.min.js"></script>
+    <script nomodule src="./assets/alpine-ie11.min.js" defer></script>
+    <script src="./app.js"></script>
+
+    <script>
+        function initTasks() {
+            return {
+                fetchTestData() {
+                    let data = {
+                        pos: this.pos,
+                        limit: this.limit,
+                        currentPage: this.currentPage,
+                        status: this.optionValue
+                    }
+                    fetchData(data).then(res => {
+                       console.log(res)
+                    })
+                },
+                // async fetchData() {
+                //     let data = {
+                //         pos: this.pos,
+                //         limit: this.limit,
+                //         currentPage: this.currentPage,
+                //         status: this.optionValue
+                //     }
+                //     await fetchData(data)
+                // }
+            }
+        }
+    </script>
 </head>
+
 <body>
-    <div x-data="{ message: 'Hello, Alpine.js!' }">
-        <p x-text="message"></p>
-      </div>
+    <div class="text-center p-20">
+        <div x-data="initTasks()" x-init="fetchTestData()" class="space-y-10 w-full flex-grow pl-10">
+        </div>
+    </div>
 </body>
+
 </html>

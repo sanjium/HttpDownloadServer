@@ -18,4 +18,6 @@ public interface TransferService extends IService<Transfer> {
     ResponseResult<String> updateThreadTransfer(Long id, Integer count);
 
     ResponseResult getTasks(Integer pageNum, Integer pageSize);
+
+    ResponseResult getFilterTasks(Integer pageNum, Integer pageSize, String filter);
 }
