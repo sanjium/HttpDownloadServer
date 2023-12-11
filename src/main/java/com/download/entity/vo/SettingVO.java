@@ -12,7 +12,9 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SettingVO extends Setting {
+public class SettingVO {
+
+    private String downloadPath;
 
     private int maxTasks;
 
@@ -20,6 +22,4 @@ public class SettingVO extends Setting {
 
     private long maxUploadSpeed;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createAt;
 }
