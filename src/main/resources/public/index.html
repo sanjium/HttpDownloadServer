@@ -14,23 +14,30 @@
         function initFile() {
             return {
                 files: [],
-                optionValue: '',
+                optionValue: 'all',
                 filePath: ['/file'],
-                async fetchData(path) {
-                    await fetchFileList(path).then(res => {
-                        this.files = res
-                        console.log(res)
-                    })
-                },
-                async filterType(paths, type) {
+                sort: '',
+                async fetchList(paths, type, sort) {
                     let path = ''
-                    for (let i = 0; i < paths.length; i++) {
-                        path = paths.join('')
+                    if (paths) {
+                        for (let i = 0; i < paths.length; i++) {
+                            path = paths.join('')
+                        }
                     }
-                    await fetchFilterFile(path, type).then(res => {
-                        this.files = res
-                        console.log(res)
-                    })
+                    if (type) {
+                        this.optionValue = type
+                    }
+                    if (sort) {
+                        this.sort = sort
+                    }
+                    let data = {
+                        path: path,
+                        type: this.optionValue,
+                        sort: this.sort,
+                    }
+                    const resp = await fetchFileList(data)
+
+                    this.files = resp || []
                 },
                 goFile(file) {
                     if (file) {
@@ -56,17 +63,7 @@
                     const index = this.filePath.indexOf(path)
                     this.filePath.splice(index + 1)
                     console.log(this.filePath)
-                    this.fetchData(path)
-                },
-                sortFileType(paths, type) {
-                    let path = ''
-                    for (let i = 0; i < paths.length; i++) {
-                        path = paths.join('')
-                    }
-                    sortFileList(path, type).then(res => {
-                        this.files = res
-                        console.log(res)
-                    })
+                    this.fetchList(path)
                 }
             }
         }
@@ -104,7 +101,7 @@
                 <span> Settings</span>
             </a>
         </div>
-        <div x-data="initFile()" x-init="fetchData" class="space-y-10 w-full flex-grow pl-10">
+        <div x-data="initFile()" x-init="fetchList" class="space-y-10 w-full flex-grow pl-10">
             <div class="flex items-center justify-between w-full">
                 <div class="flex items-center space-x-1">
                     <template x-if="filePath.length>0">
@@ -117,7 +114,7 @@
                     </template>
                 </div>
 
-                <select x-model="optionValue" @change="filterType(filePath,optionValue)" class="rounded-md">
+                <select x-model="optionValue" @change="fetchList(filePath,optionValue)" class="rounded-md">
                     <option value="all">All(*.*)</option>
                     <option value="video">Video(*.mp4;*.mov)</option>
                     <option value="image">Photo(*.png;*.jpg;*.gif)</option>
@@ -135,7 +132,7 @@
                                         <th scope="col"
                                             class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
                                             <div class="flex items-center cursor-pointer"
-                                                @click="sortFileType(filePath,'name')">
+                                                @click="fetchList(filePath,undefined,'name')">
                                                 <p>File name</p>
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                     stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -147,7 +144,7 @@
                                         <th scope="col"
                                             class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                             <div class="flex items-center cursor-pointer"
-                                                @click="sortFileType(filePath,'size')">
+                                                @click="fetchList(filePath,undefined,'size')">
                                                 <p>Size</p>
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                     stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -159,7 +156,7 @@
                                         <th scope="col"
                                             class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                             <div class="flex items-center cursor-pointer"
-                                                @click="sortFileType(filePath,'createdAt')">
+                                                @click="fetchList(filePath,undefined,'createdAt')">
                                                 <p>Create time</p>
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                     stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
