@@ -4,11 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class SortFileDTO {
-    private String path;
-
-    private String sort;
-}
+//@Data
+//@AllArgsConstructor
+//@NoArgsConstructor
+//public class SortFileDTO {
+//    private String path;
+//
+//    private String sort;
+//}

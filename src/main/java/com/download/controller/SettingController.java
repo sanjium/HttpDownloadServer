@@ -22,7 +22,6 @@ public class SettingController {
     @LogAnnotation(operation = "返回")
     public ResponseResult<List<SettingVO>> fetchSettings(){
         Page<Setting> page = new Page<>();
-
         Page<Setting> page1 = settingService.page(page);
         ArrayList<SettingVO> list = new ArrayList<>();
         for (Setting record : page1.getRecords()) {

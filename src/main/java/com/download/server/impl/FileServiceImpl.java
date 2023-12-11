@@ -1,6 +1,5 @@
 package com.download.server.impl;
 import com.download.entity.vo.FileVO;
-import com.download.mapper.SettingMapper;
 import com.download.server.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,14 +13,12 @@ public class FileServiceImpl implements FileService {
     @Autowired
     private FileService fileService;
 
-    @Autowired
-    private SettingMapper settingMapper;
-
     @Override
-    public List<FileVO> getFileList(String path, String filter) {
+    public List<FileVO> getFileList(String path, String type) {
         List<FileVO> fileList = new ArrayList<>();
         // 读取本地目录中的文件信息
-        List<File> files = readLocalFiles(path, filter);
+        List<File> files = readLocalFiles(path, type);
+        System.out.println("---------------------------------------");
         // 将文件信息封装到FileVo对象中
         for (File file : files) {
             FileVO fileVo = new FileVO();
@@ -32,7 +29,7 @@ public class FileServiceImpl implements FileService {
             fileVo.setCreateAt(getFileCreationTime(file));
             // 如果是目录，则递归获取子文件列表
             if (file.isDirectory()) {
-                fileVo.setChildren(getFileList(file.getPath(), filter));
+                fileVo.setChildren(getFileList(file.getPath(), type));
             }
             fileList.add(fileVo);
         }
@@ -40,7 +37,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public List<FileVO> sortFileList(String path, String sort) {
+    public List<FileVO> sortFileList(String path, String sort,String order) {
         FileVO fileVO = new FileVO();
         List<FileVO> fileList = new ArrayList<>();
         // 读取本地目录中的文件信息
@@ -80,6 +77,12 @@ public class FileServiceImpl implements FileService {
                 }
             });
         }
+        //降序
+        if(order.equals("down")){
+            Collections.reverse(fileList);
+        }else{
+            return fileList;
+        }
         return fileList;
     }
 
@@ -96,7 +99,7 @@ public class FileServiceImpl implements FileService {
         return null;
     }
     // 读取本地目录中的文件信息
-    private List<File> readLocalFiles(String path, String filter) {
+    private List<File> readLocalFiles(String path, String type) {
         // 根据path和filter读取本地目录中的文件信息并返回
         // 读取目录中的文件信息
         // 注意：这里需要根据path和filter筛选出符合条件的文件
@@ -109,7 +112,7 @@ public class FileServiceImpl implements FileService {
         List<File> fileLists = new ArrayList<>();
         if(fileList != null){
             for(File file : fileList){
-                if(getFileExtension(file).equals(filterParms.get(filter))){
+                if(getFileExtension(file).equals(filterParms.get(type))){
                     fileLists.add(file);
                 }
             }

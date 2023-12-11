@@ -6,7 +6,6 @@ import com.download.aop.LogAnnotation;
 import com.download.entity.ResponseResult;
 import com.download.entity.domain.Setting;
 import com.download.entity.dto.FetchFileDTO;
-import com.download.entity.dto.SortFileDTO;
 import com.download.entity.vo.FileVO;
 import com.download.server.FileService;
 import com.download.server.SettingService;
@@ -24,35 +23,43 @@ public class FileController {
 
     @Autowired
     private FileService fileService;
-
     @Autowired
     private SettingService settingService;
-    @GetMapping("/fetch_filter_file")
+    @PostMapping ("/file_list")
     @LogAnnotation(operation = "查看文件")
-    public ResponseResult fetchFilterFile(@RequestParam String path,@RequestParam String type) {
-        Path path1 = Paths.get(path);
-
+    public ResponseResult fetchFilterFile(@RequestBody FetchFileDTO fetchFileDTO) {
+        Path path1 = Paths.get(fetchFileDTO.getPath());
         LambdaQueryWrapper<Setting> wrapper = new LambdaQueryWrapper<>();
-        System.out.println("--------------------------");
-        System.out.println(path1.toString());
         wrapper.eq(Setting::getDownloadPath, path1.toString());
         String pathOne = settingService.getOne(wrapper).getDownloadPath();
         if (pathOne == null){
             return null;
         }
-        List<FileVO> fileList = fileService.getFileList(String.valueOf(path1.toAbsolutePath()),
-                type);
-        return ResponseResult.ok(fileList);
+//        System.out.println("====================================");
+//        System.out.println(path1.toAbsolutePath().getRoot());
+//        System.out.println(path1.getRoot());
+//        System.out.println(path1.toAbsolutePath().getRoot().toString()+path1.toString());
+//        System.out.println("-----------------------------");
+//        System.out.println(path1.toAbsolutePath());
+        if(fetchFileDTO.getSort().equals("null")) {
+            List<FileVO> fileList = fileService.getFileList(path1.toAbsolutePath().getRoot().toString() + path1.toString(),
+                    fetchFileDTO.getType());
+            return ResponseResult.ok(fileList);
+        }else{
+            List<FileVO> fileList2 = fileService.sortFileList(path1.toAbsolutePath().getRoot().toString() + path1.toString(),
+                    fetchFileDTO.getSort(),fetchFileDTO.getOrder());
+            return ResponseResult.ok(fileList2);
+        }
     }
     /*
     内存从小到大
      */
-    @PostMapping("/sort_file_list")
-    @LogAnnotation(operation = "文件排序")
-    public ResponseResult sortFileList(@RequestBody SortFileDTO sort) {
-        Path path1 = Paths.get(sort.getPath());
-        //Path parent = path1.toAbsolutePath();
-        List<FileVO> fileLists = fileService.sortFileList(String.valueOf(path1.toAbsolutePath()), sort.getSort());
-        return ResponseResult.ok(fileLists);
-    }
+//    @PostMapping("/sort_file_list")
+//    @LogAnnotation(operation = "文件排序")
+//    public ResponseResult sortFileList(@RequestBody SortFileDTO sortFileDTO) {
+//        Path path1 = Paths.get(sortFileDTO.getPath());
+//        //Path parent = path1.toAbsolutePath();
+//        List<FileVO> fileLists = fileService.sortFileList(String.valueOf(path1.toAbsolutePath()),sortFileDTO.getSort());
+//        return ResponseResult.ok(fileLists);
+//    }
 }

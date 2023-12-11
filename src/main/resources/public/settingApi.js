@@ -1,4 +1,4 @@
-const BASE_URL = "http://43.248.191.29:8585"
+const BASE_URL = "http://localhost:8080"
 
 // 设置页面 api,下面是需要返回给我的数据格式
 async function fetchSettings() {
@@ -18,29 +18,10 @@ async function fetchSettings() {
     }
 }
 
-
 // 保存设置
-async function saveSettings(settings) {
-    console.log(settings)
-    const resp = await fetch(`${BASE_URL}/setting/savesettings`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(settings)
-    })
-    console.log(resp, 'resp')
-    // const data = await resp.json()
-    return true
-}
-
-
-// TODO: 获取文件列表，过滤可以一起做了，四个参数 path, type, sort，order（正序/倒序）
-// 进行排序的时候，参数放在body里面，不要放在url里面
-// 如果 没有path参数或者参数是/file，就是获取根目录下的文件列表,有path参数，就是获取path目录下的文件列表
-async function fetchFileList(params) {
+async function saveSettings(params) {
     console.log(params)
-    const resp = await fetch(`${BASE_URL}/file/file_list`, {
+    const resp = await fetch(`${BASE_URL}/setting/save`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -48,10 +29,80 @@ async function fetchFileList(params) {
         body: JSON.stringify(params)
     })
     console.log(resp, 'resp')
-    const data = await resp.json()
-    console.log(data, 'data json')  // 看一下返回的数据格式，确定返回的内容
-    return data.data
+    // const data = await resp.json()
+    return true
 }
+
+// body解析 参数 然后
+// TODO: 获取文件列表，过滤可以一起做了，四个参数 path, type, sort，order（正序/倒序）
+// 进行排序的时候，参数放在body里面，不要放在url里面
+// 如果 没有path参数或者参数是/file，就是获取根目录下的文件列表,有path参数，就是获取path目录下的文件列表
+async function fetchFileList(params) {
+    console.log(params)
+    // let name = null
+    // let isDirectory = null
+    // let path = null
+    // let size = null
+    // let createAt = null
+    // let children = []
+    if (params.sort=="null") {
+        const resp = await fetch(BASE_URL + "/file/file_list", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(params)
+        })
+            console.log(resp, 'resp')
+            const data = await resp.json()
+            console.log(data, 'data json')
+            return data
+        }else{
+        const resp = await fetch(BASE_URL + "/file/file_list", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(params)
+        })
+        console.log(resp, 'resp')
+        const data = await resp.json()
+        console.log(data, 'data json')
+        return data
+
+}
+
+}
+    // const resp = await fetch(`${BASE_URL}/file/file_list`, {
+    //     method: "POST",
+    //     headers: {
+    //         "Content-Type": "application/json"
+    //     },
+    //     body: JSON.stringify(params)
+    // })
+    // console.log(resp, 'resp')
+    // const data = await resp.json()
+    // console.log(data, 'data json')  // 看一下返回的数据格式，确定返回的内容
+    // return data.data
+
+
+
+// // TODO: 进行排序的时候，参数放在body里面，不要放在url里面.这个接口不要了，合并在上面了
+// //点击排序按钮，对文件列表进行排序
+// async function sortFileList(params) {
+//     console.log(params, 'sort files')
+//     const resp = await fetch(BASE_URL + "/file/sort_file_list", {
+//         method: "POST",
+//         headers: {
+//             "Content-Type": "application/json"
+//         },
+//         body: JSON.stringify(params)
+//     })
+//     console.log(resp, 'resp')
+//     const data = await resp.json()
+//     console.log(data, 'data json')
+//     return data.data
+// }
 
 
 // mock 的 api,需要的参数和返回的数据格式
@@ -161,21 +212,3 @@ async function fetchFileList(params) {
 //             ]
 //         }
 // }
-
-// TODO: 进行排序的时候，参数放在body里面，不要放在url里面.这个接口不要了，合并在上面了
-//点击排序按钮，对文件列表进行排序
-async function sortFileList(params) {
-    console.log(params, 'sort files')
-    const resp = await fetch(BASE_URL + "/file/sort_file_list/", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(params)
-    })
-    console.log(resp, 'resp')
-    const data = await resp.json()
-    console.log(data, 'data json')
-    return data.data
-}
-
