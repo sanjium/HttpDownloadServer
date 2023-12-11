@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8080"
+const BASE_URL = "http://43.248.191.29:8585"
 
 
 //TODO: tasks 页面 api, params是一个对象，包含了currentPage，optionValue（filter）和limit三个属性,  //用POST 方法
@@ -43,9 +43,21 @@ async function changeThreads(params) {
     return isSuccess
 }
 
+// TODO: 获取下载路径,这个接口没有,把url传给你了
 async function submitDownloadPath(path) {
     console.log(path)
-    return true
+    const resp = await fetch(BASE_URL + "/transfer/submit", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({url: path})
+    })
+    const data = await resp.json()
+    console.log(data, 'data json')
+    if (resp.code === 200) {
+        location.reload()
+    }
 }
 
 // 重新下载任务的详细信息，ids是一个数组，单个任务，就是一个元素的数组，多个任务就是多个元素的数组，实现同一个接口单量和多量的处理

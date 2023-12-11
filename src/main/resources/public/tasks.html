@@ -18,6 +18,7 @@
                 limit: 5,
                 currentPage: 1,
                 downloadPath: '',
+                timeDiff: '',
                 tasks: {},
                 taskData: [],
                 checkValue: [],
@@ -51,6 +52,8 @@
                         result.push(ids[i]);
                     }
                     await fetchTaskInfo(result)
+                    this.checkValue = []
+                    await this.fetchData()
                 },
                 // 下面这部分 要是多选的时候，每一个的状态都要发生变化，用sse去获取每一个的状态
                 async pauseTaskDownload(ids) {
@@ -113,7 +116,6 @@
                     this.currentPage = 1
                     this.optionValue = optionValue
                     let data = {
-                        id: id,
                         pos: this.pos,
                         limit: this.limit,
                         currentPage: this.currentPage,
@@ -148,21 +150,35 @@
                     await this.fetchData()
                 },
                 async handlThreads(task, type) {
-                    let data = {
-                        id: task.id,
-                        threads: task.threads
-                    }
                     if (type === 'up') {
                         task.threads++
-                        await changeThreads(data)
                     } else {
                         if (task.threads === 1) {
                             return
                         } else {
                             task.threads--
-                            await changeThreads(data)
                         }
                     }
+                    let data = {
+                        id: task.id,
+                        threads: task.threads
+                    }
+                    try {
+                        await changeThreads(data)
+                    } catch (error) {
+                        console.log(error)
+                    }
+                },
+                handleTime(createdAt, finishedAt) {
+                    const startDate = new Date(createdAt);
+                    const endDate = new Date(finishedAt);
+
+                    const milliseconds = endDate - startDate;
+                    const seconds = Math.floor(milliseconds / 1000) % 60;
+                    const minutes = Math.floor(milliseconds / (1000 * 60)) % 60;
+                    const hours = Math.floor(milliseconds / (1000 * 60 * 60)) % 24;
+                    const timeDiff = `${hours}h${minutes}m${seconds}s`
+                    return timeDiff
                 }
             }
         }
@@ -235,7 +251,7 @@
                                 d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
                         </svg>
 
-                        <template x-if="showPause">
+                        <!-- <template x-if="showPause"> -->
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="w-6 h-6 cursor-pointer hover:text-green-600"
                                 @click="resumeTaskDownload(checkValue)">
@@ -244,16 +260,16 @@
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112z" />
                             </svg>
-                        </template>
+                        <!-- </template> -->
 
-                        <template x-if="!showPause">
+                        <!-- <template x-if="!showPause"> -->
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="w-6 h-6 cursor-pointer hover:text-green-600"
                                 @click="pauseTaskDownload(checkValue)">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M14.25 9v6m-4.5 0V9M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                        </template>
+                        <!-- </template> -->
 
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-6 h-6 cursor-pointer hover:text-red-600"
@@ -278,17 +294,17 @@
                         <div class="w-full">
                             <div class="flex items-center justify-between text-gray-500 w-full">
                                 <p x-text="task.name"></p>
-                                <template x-if="task.threads">
-                                    <div class="flex items-center text-gray-800">
-                                        <p class="cursor-pointer" @click="handlThreads(task,'desc')">-</p>
-                                        <p class="mx-3 underline" x-text="task.threads"></p>
-                                        <p class="cursor-pointer" @click="handlThreads(task,'up')">+</p>
-                                    </div>
-                                </template>
-                                <div class="font-semibold space-y-1">
-                                    <p x-text="task.status"></p>
-                                    <p x-text="task.timeLeft"></p>
+                                <div class="space-y-2">
+                                    <template x-if="task.threads">
+                                        <div class="flex items-center text-gray-800 ml-2">
+                                            <p class="cursor-pointer" @click="handlThreads(task,'desc')">-</p>
+                                            <p class="mx-3 underline" x-text="task.threads"></p>
+                                            <p class="cursor-pointer" @click="handlThreads(task,'up')">+</p>
+                                        </div>
+                                    </template>
+
                                 </div>
+
                                 <div class="flex items-center space-x-3 invisible group-hover:visible">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor"
@@ -326,46 +342,60 @@
                                     </svg>
                                 </div>
                             </div>
-                            <!-- <div class="bg-gray-300 w-full h-2 relative mt-3 rounded-full">
+                            <div class="bg-gray-300 w-full h-2 relative rounded-full mt-3">
                                 <div class="bg-blue-600 h-2 rounded-full" :style="`width: ${task.progress}%`"></div>
                                 <p x-text="`${task.progress}%`" class="absolute right-2 text-sm text-blue-600 top-2">
                                 </p>
-                            </div> -->
-
-                            <!-- <div class="w-full flex items-center justify-between mt-6">
-                                <p class="font-semibold">
-                                    <span x-text="task.speed"></span>
-                                    <span>/</span>
-                                    <span x-text="task.size"></span>
-                                </p>
+                            </div>
+                            <div class="flex items-center justify-between mt-5">
                                 <p class="font-semibold flex items-center">
                                     <template x-if="task.downloadSpeed">
-                                        <span class="flex items-center mx-1">
+                                        <span class="flex items-center">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-teal-500">
+                                                stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-teal-500">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="M15.75 17.25L12 21m0 0l-3.75-3.75M12 21V3" />
                                             </svg>
                                             <span x-text="task.downloadSpeed"></span>
                                         </span>
                                     </template>
-                                    <template x-if="task.uploadSpeed">
-                                        <span class="flex items-center mx-1">
-                                            <span>/</span>
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-red-500 ">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M8.25 6.75L12 3m0 0l3.75 3.75M12 3v18" />
-                                            </svg>
-                                            <span x-text="task.uploadSpeed"></span>
-                                        </span>
+                                </p>
+
+                                <div class="space-x-1 flex">
+                                    <template x-if="task.status">
+                                        <div class="flex items-center">
+                                            <span x-text="task.status"
+                                                class="px-2 py-0.5 bg-gray-100 rounded capitalize"></span>
+                                            <!-- <span>Remaining</span> -->
+                                            <span class="pl-2 font-semibold"
+                                                x-text="handleTime(task.createdAt,task.finishedAt)"></span>
+                                        </div>
                                     </template>
-                                </p>
-                                <p class="font-semibold">
-                                    <span x-text="task.status"></span>
-                                    <span x-text="task.timeLeft"></span>
-                                </p>
-                            </div> -->
+
+                                    <!-- <template x-if="task.status==='downloaded'">
+                                        <div class="flex items-center">
+                                            <span x-text="task.status" class="px-2 py-0.5 bg-gray-100 rounded"></span>
+                                            <span>Usage</span>
+                                            <span class="pl-2 font-semibold"
+                                                x-text="handleTime(task.createdAt,task.finishedAt)"></span>
+                                        </div>
+                                    </template>
+                                    <template x-if="task.status != 'downloading'&&'downloaded'">
+                                        <span x-text="task.status" class="px-2 py-0.5 bg-gray-100 rounded"></span>
+                                    </template> -->
+
+                                </div>
+
+                                <div class=" space-x-1 flex">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-amber-500">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+
+                                    <p x-text="(task.createdAt).slice(0,10)" class="text-sm text-gray-500"></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
