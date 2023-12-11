@@ -6,6 +6,7 @@ import com.download.aop.LogAnnotation;
 import com.download.entity.ResponseResult;
 import com.download.entity.domain.Setting;
 import com.download.entity.dto.FetchFileDTO;
+import com.download.entity.dto.SortFileDTO;
 import com.download.entity.vo.FileVO;
 import com.download.entity.vo.SettingVO;
 import com.download.server.FileService;
@@ -60,10 +61,10 @@ public class FileController {
      */
     @PostMapping("/sort_file_list")
     @LogAnnotation(operation = "文件排序")
-    public ResponseResult sortFileList(@RequestParam String path,@RequestParam String sort) {
-        Path path1 = Paths.get(path);
+    public ResponseResult sortFileList(@RequestBody SortFileDTO sort) {
+        Path path1 = Paths.get(sort.getPath());
         //Path parent = path1.toAbsolutePath();
-        List<FileVO> fileLists = fileService.sortFileList(String.valueOf(path1.toAbsolutePath()), sort);
+        List<FileVO> fileLists = fileService.sortFileList(String.valueOf(path1.toAbsolutePath()), sort.getSort());
         return ResponseResult.ok(fileLists);
     }
 }
