@@ -9,5 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SortFileDTO {
     private String path;
+
     private String sort;
 }

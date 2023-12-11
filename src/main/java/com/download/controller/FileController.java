@@ -8,7 +8,6 @@ import com.download.entity.domain.Setting;
 import com.download.entity.dto.FetchFileDTO;
 import com.download.entity.dto.SortFileDTO;
 import com.download.entity.vo.FileVO;
-import com.download.entity.vo.SettingVO;
 import com.download.server.FileService;
 import com.download.server.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,20 +29,9 @@ public class FileController {
     private SettingService settingService;
     @GetMapping("/fetch_filter_file")
     @LogAnnotation(operation = "查看文件")
-    public ResponseResult fetchFilterFile(@RequestBody FetchFileDTO fetchFileDTO) {
+    public ResponseResult fetchFilterFile(@RequestParam String path,@RequestParam String type) {
+        Path path1 = Paths.get(path);
 
-        Path path1 = Paths.get(fetchFileDTO.getPath());
-//        System.out.println("------------------------------------");
-//        System.out.println(path1);
-//        //获取父目录（根目录）
-//        String parent = String.valueOf(path1.toAbsolutePath().getParent());
-//        System.out.println("-----------------------------------------");
-//        System.out.println(parent);
-//        String path = String.valueOf(path1.toAbsolutePath());
-//        System.out.println("------------------------------------------");
-//        System.out.println(path);
-//        System.out.println("---------------------------------------------");
-//        System.out.println(path.replace(parent, ""));
         LambdaQueryWrapper<Setting> wrapper = new LambdaQueryWrapper<>();
         System.out.println("--------------------------");
         System.out.println(path1.toString());
@@ -53,7 +41,7 @@ public class FileController {
             return null;
         }
         List<FileVO> fileList = fileService.getFileList(String.valueOf(path1.toAbsolutePath()),
-                fetchFileDTO.getFilter());
+                type);
         return ResponseResult.ok(fileList);
     }
     /*

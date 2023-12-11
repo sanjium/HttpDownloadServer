@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class FetchFileDTO {
     private String path;
     private String filter;
+
 }
