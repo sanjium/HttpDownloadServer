@@ -16,7 +16,6 @@ async function fetchSettings() {
     } catch (e) {
         console.log(e)
     }
-
 }
 
 
@@ -36,7 +35,7 @@ async function saveSettings(settings) {
 }
 
 
-// TODO: 获取文件列表，过滤可以一起做了，单个参数 path, type, sort
+// TODO: 获取文件列表，过滤可以一起做了，四个参数 path, type, sort，order（正序/倒序）
 // 进行排序的时候，参数放在body里面，不要放在url里面
 // 如果 没有path参数或者参数是/file，就是获取根目录下的文件列表,有path参数，就是获取path目录下的文件列表
 async function fetchFileList(params) {
@@ -51,7 +50,7 @@ async function fetchFileList(params) {
     console.log(resp, 'resp')
     const data = await resp.json()
     console.log(data, 'data json')  // 看一下返回的数据格式，确定返回的内容
-     return data.data
+    return data.data
 }
 
 

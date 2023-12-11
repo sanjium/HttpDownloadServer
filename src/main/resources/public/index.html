@@ -17,7 +17,9 @@
                 optionValue: 'all',
                 filePath: ['/file'],
                 sort: '',
-                async fetchList(paths, type, sort) {
+                order: 'up',
+                async fetchList(paths, type, sort, order) {
+                    this.order = this.order === 'up' ? 'down' : 'up'
                     let path = ''
                     if (paths) {
                         for (let i = 0; i < paths.length; i++) {
@@ -34,6 +36,7 @@
                         path: path,
                         type: this.optionValue,
                         sort: this.sort,
+                        order: this.order
                     }
                     const resp = await fetchFileList(data)
 
