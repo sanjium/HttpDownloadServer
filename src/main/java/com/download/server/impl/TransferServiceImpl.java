@@ -1,6 +1,7 @@
 package com.download.server.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.download.entity.ResponseResult;
@@ -28,10 +29,20 @@ public class TransferServiceImpl extends ServiceImpl<TransferMapper, Transfer> i
     }
 
     @Override
-    public ResponseResult<String> submitTransfer(List<Transfer> transfers) {
-        for (Transfer transfer : transfers) {
-            transferMapper.insert(transfer);
-        }
+    public ResponseResult<String> submitTransfer(String url) {
+        Transfer transfer = new Transfer();
+        transfer.setType("http");
+        transfer.setName("测试名称");
+        transfer.setUrl(url);
+        transfer.setStatus("downloading");
+        transfer.setProgress("0");
+        transfer.setSpeed("0KB");
+        transfer.setSize("1.2GB");
+        transfer.setDownloadSpeed("333KB");
+        transfer.setThreads(2);
+        transfer.setTimeLeft("0m 0s");
+        transfer.setFinishedAt(LocalDateTime.now().plusHours(1));
+        save(transfer);
         return ResponseResult.ok("访问提交接口成功");
     }
 
@@ -76,8 +87,6 @@ public class TransferServiceImpl extends ServiceImpl<TransferMapper, Transfer> i
 
     @Override
     public ResponseResult updateThreadTransfer(Long id, Integer count) {
-        System.out.println(id);
-        System.out.println(count);
         Transfer transfer = transferMapper.selectById(id);
         transfer.setThreads(count);
         boolean isUpdate = updateById(transfer);
@@ -90,25 +99,21 @@ public class TransferServiceImpl extends ServiceImpl<TransferMapper, Transfer> i
     }
 
     @Override
-    public ResponseResult getTasks(Integer pageNum, Integer pageSize) {
+    public ResponseResult getTasks(Integer pageNum, Integer pageSize, String status) {
+        System.out.println(pageNum);
+        System.out.println(pageSize);
+        System.out.println(status);
         LambdaQueryWrapper<Transfer> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(getAllTasks(status), Transfer::getStatus, status);
         Page<Transfer> page = new Page<>(pageNum, pageSize);
         page(page, lambdaQueryWrapper);
         List<Transfer> records = page.getRecords();
-        Integer total = records.size();
+        Long total = page.getTotal();
         GetTasksVO getTasksVO = new GetTasksVO(total, records);
         return ResponseResult.ok(getTasksVO);
     }
 
-    @Override
-    public ResponseResult getFilterTasks(Integer pageNum, Integer pageSize, String filter) {
-        LambdaQueryWrapper<Transfer> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(Transfer::getStatus, filter);
-        Page<Transfer> page = new Page<>(pageNum, pageSize);
-        page(page, lambdaQueryWrapper);
-        List<Transfer> records = page.getRecords();
-        Integer total = records.size();
-        GetTasksVO getTasksVO = new GetTasksVO(total, records);
-        return ResponseResult.ok(getTasksVO);
+    public Boolean getAllTasks(String status) {
+        return !StringUtils.isBlank(status) && !status.equals("all");
     }
 }

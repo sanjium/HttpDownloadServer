@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class GetTasksVO implements Serializable {
 
-    private Integer total;            
+    private Long total;
     private List<Transfer> items;
 
 }
