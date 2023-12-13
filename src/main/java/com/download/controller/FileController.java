@@ -12,6 +12,7 @@ import com.download.server.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.crypto.spec.PSource;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -28,13 +29,20 @@ public class FileController {
     @PostMapping ("/file_list")
     @LogAnnotation(operation = "查看文件")
     public ResponseResult fetchFilterFile(@RequestBody FetchFileDTO fetchFileDTO) {
-        Path path1 = Paths.get(fetchFileDTO.getPath());
         LambdaQueryWrapper<Setting> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Setting::getDownloadPath, path1.toString());
-        String pathOne = settingService.getOne(wrapper).getDownloadPath();
-        if (pathOne == null){
-            return null;
+        String path = "";
+        if(fetchFileDTO.getPath().equals("/")){
+            path = settingService.getOne(wrapper).getDownloadPath();
+            System.out.println("========================");
+            System.out.println(path);
+        }else{
+            path = fetchFileDTO.getPath();
+            System.out.println("=========================");
+            System.out.println(path);
         }
+        Path path1 = Paths.get(path);
+       // wrapper.eq(Setting::getDownloadPath, path1.toString());
+        //String pathOne = settingService.getOne(wrapper).getDownloadPath();
 //        System.out.println("====================================");
 //        System.out.println(path1.toAbsolutePath().getRoot());
 //        System.out.println(path1.getRoot());
