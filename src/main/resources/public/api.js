@@ -1,5 +1,5 @@
-// const BASE_URL = "http://43.248.191.29:8585"
-const BASE_URL = "http://localhost:8080"
+const BASE_URL = "http://43.248.191.29:8585"
+// const BASE_URL = "http://localhost:8080"
 
 // tasks 页面 api, params是一个对象，包含了currentPage，optionValue（filter）和limit三个属性,  //用POST 方法
 // ； /transfer/get_tasks 这个第一次获取和过滤是同一个接口，合并一下了，默认all的情况，如果optionValue是all，就是获取所有的任务，如果optionValue是filter，就是获取符合filter的任务
