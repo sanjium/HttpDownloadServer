@@ -94,6 +94,9 @@ public class Transfer {
     @TableField("finished_at")
     private LocalDateTime finishedAt;
 
+    @TableField(exist = false)
+    private String remainingTime;
+
     /*
      * 删除标记(0为删除，1为未删除)
      * */
