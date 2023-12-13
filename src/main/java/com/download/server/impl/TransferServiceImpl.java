@@ -13,7 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class TransferServiceImpl extends ServiceImpl<TransferMapper, Transfer> implements TransferService {
@@ -100,14 +104,40 @@ public class TransferServiceImpl extends ServiceImpl<TransferMapper, Transfer> i
 
     @Override
     public ResponseResult getTasks(Integer pageNum, Integer pageSize, String status) {
-        System.out.println(pageNum);
-        System.out.println(pageSize);
-        System.out.println(status);
         LambdaQueryWrapper<Transfer> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(getAllTasks(status), Transfer::getStatus, status);
         Page<Transfer> page = new Page<>(pageNum, pageSize);
         page(page, lambdaQueryWrapper);
         List<Transfer> records = page.getRecords();
+        records.forEach(transfer -> {
+            String transferStatus = transfer.getStatus();
+            switch (transferStatus) {
+                case "downloading" -> {
+                    String size = transfer.getSize();
+                    String regEx = "[^0-9]";
+                    Pattern p = Pattern.compile(regEx);
+                    double downloadSpeed = Double.parseDouble(p.matcher(transfer.getDownloadSpeed()).replaceAll("").trim());
+                    double parseSize = Double.parseDouble(p.matcher(size).replaceAll("").trim());
+                    if (size.endsWith("KB")) {
+                        Double remainingTime = (parseSize * (1 - (Double.parseDouble(transfer.getProgress()) / 100))) / downloadSpeed;
+                        transfer.setRemainingTime(remainingTime + "s");
+                    } else if (size.endsWith("MB")) {
+                        Double remainingTime = (parseSize * 1024 * (1 - (Double.parseDouble(transfer.getProgress()) / 100))) / downloadSpeed;
+                        transfer.setRemainingTime(remainingTime + "s");
+                    } else if (size.endsWith("GB")) {
+                        Double remainingTime = (parseSize * 1024 * 1024 * (1 - (Double.parseDouble(transfer.getProgress()) / 100))) / downloadSpeed;
+                        transfer.setRemainingTime(remainingTime + "s");
+                    }
+                }
+                case "downloaded" -> {
+                    LocalDateTime finishedAt = transfer.getFinishedAt();
+                    LocalDateTime createdAt = transfer.getCreatedAt();
+                    long remainingTime = Math.abs(finishedAt.until(createdAt, ChronoUnit.SECONDS));
+                    transfer.setRemainingTime(remainingTime + "s");
+                }
+                case "pending" -> transfer.setRemainingTime(null);
+            }
+        });
         Long total = page.getTotal();
         GetTasksVO getTasksVO = new GetTasksVO(total, records);
         return ResponseResult.ok(getTasksVO);
