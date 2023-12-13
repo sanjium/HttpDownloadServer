@@ -1,5 +1,5 @@
-const BASE_URL = "http://43.248.191.29:8585"
-// const BASE_URL = "http://localhost:8080"
+// const BASE_URL = "http://43.248.191.29:8585"
+const BASE_URL = "http://localhost:8080"
 
 // 设置页面 api,下面是需要返回给我的数据格式
 async function fetchSettings() {
