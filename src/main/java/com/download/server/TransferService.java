@@ -3,11 +3,12 @@ package com.download.server;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.download.entity.ResponseResult;
 import com.download.entity.domain.Transfer;
+import com.download.entity.dto.SubmitTransferDTO;
 
 import java.util.List;
 
 public interface TransferService extends IService<Transfer> {
-    ResponseResult submitTransfer(List<Transfer> transfers);
+    ResponseResult submitTransfer(String url);
 
     ResponseResult pauseTransfer(List<Long> ids);
 
@@ -17,7 +18,6 @@ public interface TransferService extends IService<Transfer> {
 
     ResponseResult<String> updateThreadTransfer(Long id, Integer count);
 
-    ResponseResult getTasks(Integer pageNum, Integer pageSize);
+    ResponseResult getTasks(Integer pageNum, Integer pageSize,String status);
 
-    ResponseResult getFilterTasks(Integer pageNum, Integer pageSize, String filter);
 }

@@ -4,6 +4,7 @@ import com.download.aop.LogAnnotation;
 import com.download.entity.ResponseResult;
 import com.download.entity.domain.Transfer;
 import com.download.entity.dto.GetTasksDTO;
+import com.download.entity.dto.SubmitTransferDTO;
 import com.download.entity.dto.UpdateThreadTransferDTO;
 import com.download.server.TransferService;
 import lombok.extern.java.Log;
@@ -25,8 +26,8 @@ public class TransferController {
 
     @PostMapping("/submit")
     @LogAnnotation(module = "任务列表模块", operation = "提交任务")
-    public ResponseResult submitTransfer(@RequestBody List<Transfer> transfers) {
-        return transferService.submitTransfer(transfers);
+    public ResponseResult submitTransfer(@RequestBody SubmitTransferDTO submitTransferDTO) {
+        return transferService.submitTransfer(submitTransferDTO.getUrl());
     }
 
     @PostMapping("/pause")
@@ -54,17 +55,13 @@ public class TransferController {
         return transferService.updateThreadTransfer(updateThreadTransferDTO.getId(), updateThreadTransferDTO.getThreads());
     }
 
+
+
     @PostMapping("/get_tasks")
     @LogAnnotation(module = "任务列表模块", operation = "获取传输任务列表")
     public ResponseResult getTasks(@RequestBody GetTasksDTO getTasksDTO) {
         System.out.println(getTasksDTO);
-        return transferService.getTasks(getTasksDTO.getCurrentPage(), getTasksDTO.getLimit());
-    }
-
-    @GetMapping("/get_filter_tasks")
-    @LogAnnotation(module = "任务列表模块", operation = "获取过滤后的传输任务列表")
-    public ResponseResult getFilterTasks(@RequestParam Integer pageNum, @RequestParam Integer pageSize, @RequestParam String filter) {
-        return transferService.getFilterTasks(pageNum, pageSize, filter);
+        return transferService.getTasks(getTasksDTO.getCurrentPage(), getTasksDTO.getLimit(),getTasksDTO.getStatus());
     }
 
 }

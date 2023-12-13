@@ -45,7 +45,6 @@ async function fetchFileList(params) {
     // let size = null
     // let createAt = null
     // let children = []
-    if (params.sort=="null") {
         const resp = await fetch(BASE_URL + "/file/file_list", {
             method: "POST",
             headers: {
@@ -57,19 +56,6 @@ async function fetchFileList(params) {
             const data = await resp.json()
             console.log(data, 'data json')
             return data
-        }else{
-        const resp = await fetch(BASE_URL + "/file/file_list", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(params)
-        })
-        console.log(resp, 'resp')
-        const data = await resp.json()
-        console.log(data, 'data json')
-        return data
-}
 }
     // const resp = await fetch(`${BASE_URL}/file/file_list`, {
     //     method: "POST",
