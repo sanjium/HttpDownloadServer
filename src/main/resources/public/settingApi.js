@@ -39,12 +39,7 @@ async function saveSettings(params) {
 // 如果 没有path参数或者参数是/file，就是获取根目录下的文件列表,有path参数，就是获取path目录下的文件列表
 async function fetchFileList(params) {
     console.log(params)
-    // let name = null
-    // let isDirectory = null
-    // let path = null
-    // let size = null
-    // let createAt = null
-    // let children = []
+
         const resp = await fetch(BASE_URL + "/file/file_list", {
             method: "POST",
             headers: {

@@ -33,22 +33,10 @@ public class FileController {
         String path = "";
         if(fetchFileDTO.getPath().equals("/")){
             path = settingService.getOne(wrapper).getDownloadPath();
-            System.out.println("========================");
-            System.out.println(path);
         }else{
             path = fetchFileDTO.getPath();
-            System.out.println("=========================");
-            System.out.println(path);
         }
         Path path1 = Paths.get(path);
-       // wrapper.eq(Setting::getDownloadPath, path1.toString());
-        //String pathOne = settingService.getOne(wrapper).getDownloadPath();
-//        System.out.println("====================================");
-//        System.out.println(path1.toAbsolutePath().getRoot());
-//        System.out.println(path1.getRoot());
-//        System.out.println(path1.toAbsolutePath().getRoot().toString()+path1.toString());
-//        System.out.println("-----------------------------");
-//        System.out.println(path1.toAbsolutePath());
         if(fetchFileDTO.getSort().equals("null")) {
             List<FileVO> fileList = fileService.getFileList(path1.toAbsolutePath().getRoot().toString() + path1.toString(),
                     fetchFileDTO.getType());
@@ -59,15 +47,5 @@ public class FileController {
             return ResponseResult.ok(fileList2);
         }
     }
-    /*
-    内存从小到大
-     */
-//    @PostMapping("/sort_file_list")
-//    @LogAnnotation(operation = "文件排序")
-//    public ResponseResult sortFileList(@RequestBody SortFileDTO sortFileDTO) {
-//        Path path1 = Paths.get(sortFileDTO.getPath());
-//        //Path parent = path1.toAbsolutePath();
-//        List<FileVO> fileLists = fileService.sortFileList(String.valueOf(path1.toAbsolutePath()),sortFileDTO.getSort());
-//        return ResponseResult.ok(fileLists);
-//    }
+
 }
