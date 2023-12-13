@@ -31,8 +31,6 @@ public class FileController {
         Path path1 = Paths.get(fetchFileDTO.getPath());
         LambdaQueryWrapper<Setting> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Setting::getDownloadPath, path1.toString());
-        System.out.println("path1:" +
-                path1);
         String pathOne = settingService.getOne(wrapper).getDownloadPath();
         if (pathOne == null){
             return null;
