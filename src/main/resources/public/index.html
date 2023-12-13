@@ -14,13 +14,13 @@
         function initFile() {
             return {
                 files: [],
-                optionValue: 'all',
+                optionValue: '',
                 filePath: ['/file'],
                 sort: '',
                 order: 'up',
                 async fetchList(paths, type, sort, order) {
                     this.order = this.order === 'up' ? 'down' : 'up'
-                    let path = ''
+                    let path = '/'
                     if (paths) {
                         for (let i = 0; i < paths.length; i++) {
                             path = paths.join('')
@@ -38,6 +38,13 @@
                         sort: this.sort,
                         order: this.order
                     }
+
+                    //   let data = {
+                    //     path: '/data/Downloads',
+                    //     type: 'document',
+                    //     sort: 'time',
+                    //     order: 'up'
+                    // }
                     const resp = await fetchFileList(data)
 
                     this.files = resp || []
@@ -47,18 +54,9 @@
                         if (file.children) {
                             this.filePath.push(file.path)
                             this.files = file.children
-                            // TODO: 这里需要把文件的路径传过去,重新调用接口
-                            // let path = ''
-                            // for (let i = 0; i < this.filePath.length; i++) {
-                            //     path = this.filePath.join('')
-                            //     console.log(path)
-                            // }
-                            // this.fetchData(path)
                         }
                     } else {
                         this.filePath.push(file.path)
-                        // TODO: 这里需要把文件的路径传过去,重新调用接口
-                        // this.fetchData()
                     }
                 },
                 goBack(path) {
@@ -118,7 +116,7 @@
                 </div>
 
                 <select x-model="optionValue" @change="fetchList(filePath,optionValue)" class="rounded-md">
-                    <option value="all">All(*.*)</option>
+                    <option value="">All(*.*)</option>
                     <option value="video">Video(*.mp4;*.mov)</option>
                     <option value="image">Photo(*.png;*.jpg;*.gif)</option>
                     <option value="archive">Archive(*.zip;*.rar;*.tar)</option>

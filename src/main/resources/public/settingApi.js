@@ -1,5 +1,5 @@
-const BASE_URL = "http://43.248.191.29:8585"
 // const BASE_URL = "http://localhost:8080"
+const BASE_URL = "http://43.248.191.29:8585"
 
 // 设置页面 api,下面是需要返回给我的数据格式
 async function fetchSettings() {
@@ -34,7 +34,6 @@ async function saveSettings(params) {
     return true
 }
 
-// body解析 参数 然后
 // TODO: 获取文件列表，过滤可以一起做了，四个参数 path, type, sort，order（正序/倒序）
 // 进行排序的时候，参数放在body里面，不要放在url里面
 // 如果 没有path参数或者参数是/file，就是获取根目录下的文件列表,有path参数，就是获取path目录下的文件列表
@@ -46,7 +45,6 @@ async function fetchFileList(params) {
     // let size = null
     // let createAt = null
     // let children = []
-    if (params.sort=="null") {
         const resp = await fetch(BASE_URL + "/file/file_list", {
             method: "POST",
             headers: {
@@ -58,21 +56,6 @@ async function fetchFileList(params) {
             const data = await resp.json()
             console.log(data, 'data json')
             return data
-        }else{
-        const resp = await fetch(BASE_URL + "/file/file_list", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(params)
-        })
-        console.log(resp, 'resp')
-        const data = await resp.json()
-        console.log(data, 'data json')
-        return data
-
-}
-
 }
     // const resp = await fetch(`${BASE_URL}/file/file_list`, {
     //     method: "POST",
