@@ -112,30 +112,32 @@ public class TransferServiceImpl extends ServiceImpl<TransferMapper, Transfer> i
         records.forEach(transfer -> {
             String transferStatus = transfer.getStatus();
             switch (transferStatus) {
-                case "downloading" -> {
+                case "downloading":
                     String size = transfer.getSize();
                     String regEx = "[^0-9]";
                     Pattern p = Pattern.compile(regEx);
                     double downloadSpeed = Double.parseDouble(p.matcher(transfer.getDownloadSpeed()).replaceAll("").trim());
                     double parseSize = Double.parseDouble(p.matcher(size).replaceAll("").trim());
                     if (size.endsWith("KB")) {
-                        Double remainingTime = (parseSize * (1 - (Double.parseDouble(transfer.getProgress()) / 100))) / downloadSpeed;
-                        transfer.setRemainingTime(remainingTime + "s");
+                        double remainingTime = (parseSize * (1 - (Double.parseDouble(transfer.getProgress()) / 100))) / downloadSpeed;
+                        transfer.setRemainingTime(Double.toString(remainingTime));
                     } else if (size.endsWith("MB")) {
-                        Double remainingTime = (parseSize * 1024 * (1 - (Double.parseDouble(transfer.getProgress()) / 100))) / downloadSpeed;
-                        transfer.setRemainingTime(remainingTime + "s");
+                        double remainingTime = (parseSize * 1024 * (1 - (Double.parseDouble(transfer.getProgress()) / 100))) / downloadSpeed;
+                        transfer.setRemainingTime(Double.toString(remainingTime));
                     } else if (size.endsWith("GB")) {
-                        Double remainingTime = (parseSize * 1024 * 1024 * (1 - (Double.parseDouble(transfer.getProgress()) / 100))) / downloadSpeed;
-                        transfer.setRemainingTime(remainingTime + "s");
+                        double remainingTime = (parseSize * 1024 * 1024 * (1 - (Double.parseDouble(transfer.getProgress()) / 100))) / downloadSpeed;
+                        transfer.setRemainingTime(Double.toString(remainingTime));
                     }
-                }
-                case "downloaded" -> {
+                    break;
+                case "downloaded":
                     LocalDateTime finishedAt = transfer.getFinishedAt();
                     LocalDateTime createdAt = transfer.getCreatedAt();
                     long remainingTime = Math.abs(finishedAt.until(createdAt, ChronoUnit.SECONDS));
                     transfer.setRemainingTime(remainingTime + "s");
-                }
-                case "pending" -> transfer.setRemainingTime(null);
+                    break;
+                case "pending":
+                    transfer.setRemainingTime(null);
+                    break;
             }
         });
         Long total = page.getTotal();
