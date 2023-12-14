@@ -15,9 +15,7 @@
             return {
                 settings: {},
                 async fetchData() {
-                    await fetchSettings().then(res => {
-                        this.settings = res
-                    })
+                    this.settings=await fetchSettings()
                 },
                 async saveData() {
                     let data = {
