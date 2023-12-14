@@ -38,7 +38,6 @@ public class SettingController {
     }
 
     @PostMapping("/save")
-    @ResponseBody
     public ResponseResult saveSetting(@RequestBody SettingDTO settingDTO){
         LambdaQueryWrapper<Setting> wrapper = new LambdaQueryWrapper<>();
         settingService.remove(wrapper);
