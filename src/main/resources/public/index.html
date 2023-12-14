@@ -40,13 +40,16 @@
                     }
 
                     //   let data = {
-                    //     path: '/data/Downloads',
-                    //     type: 'document',
-                    //     sort: 'time',
-                    //     order: 'up'
+                    //     path: '/',
+                    //     type: '',
+                    //     sort: '',
+                    //     order: 'down'
                     // }
                     const resp = await fetchFileList(data)
                     this.files = resp || []
+                    if (this.files.length === 0) {
+                        alert('No files')
+                    }
                 },
                 goFile(file) {
                     if (file) {

@@ -170,24 +170,21 @@
                         console.log(error)
                     }
                 },
-                handleTime(createdAt, finishedAt) {
-                    const startDate = new Date(createdAt);
-                    const endDate = new Date(finishedAt);
+                handleTime(seconds) {
+                    if (seconds) {
+                        const minutes = Math.floor(seconds / 60);
+                        const remainingSeconds = seconds % 60;
+                        const hours = Math.floor(minutes / 60);
+                        const remainingMinutes = minutes % 60;
 
-                    const milliseconds = endDate - startDate;
-                    const seconds = Math.floor(milliseconds / 1000) % 60;
-                    const minutes = Math.floor(milliseconds / (1000 * 60)) % 60;
-                    const hours = Math.floor(milliseconds / (1000 * 60 * 60)) % 24;
-                    const timeDiff = `${hours}h ${minutes}m ${seconds}s`
-                    if (hours === 0) {
-                        this.timeDiff = `${minutes}m ${seconds}s`
-                    } else if (hours === 0 && minutes === 0) {
-                        this.timeDiff = `${seconds}s`
+                        if (hours > 0) {
+                            return `${hours}时${remainingMinutes}分${remainingSeconds}秒`;
+                        } else if (minutes > 0) {
+                            return `${minutes}分${remainingSeconds}秒`;
+                        } else {
+                            return `${seconds}秒`;
+                        }
                     }
-                    else {
-                        this.timeDiff = timeDiff
-                    }
-                    return this.timeDiff
                 }
             }
         }
@@ -366,14 +363,15 @@
                                         <div class="flex items-center">
                                             <span x-text="task.status"
                                                 class="px-2 py-0.5 bg-gray-100 rounded capitalize"></span>
-                                                <span class="pl-2 font-semibold" x-text="task.remainingTime"></span>
-                                            <!-- <template x-if="task.status==='downloaded'">
-                                                <span class="pl-2 font-semibold"
-                                                    x-text="handleTime(task.createdAt,task.finishedAt)"></span>
-                                            </template>
-                                            <template x-if="task.status==='downloading'">
-                                                <span class="pl-2 font-semibold" x-text="task.remainingTime"></span>
-                                            </template> -->
+                                                
+                                            <!-- <span class="pl-2 font-semibold"
+                                                x-text="handleTime(Math.floor(task.remainingTime))">
+                                            </span> -->
+                                            <!-- TODO: 去掉后面的单位后, 把上面注释的打开，把下面mock的数据删除 -->
+                                            <span class="pl-2 font-semibold"
+                                                x-text="handleTime(Math.floor(223.40266666666668))">
+                                            </span>
+
                                         </div>
                                     </template>
                                 </div>
