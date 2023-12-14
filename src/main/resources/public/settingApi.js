@@ -36,7 +36,6 @@ async function saveSettings(params) {
 
 // TODO: 获取文件列表，过滤可以一起做了，四个参数 path, type, sort，order（正序/倒序）
 // 进行排序的时候，参数放在body里面，不要放在url里面
-// 如果 没有path参数或者参数是/file，就是获取根目录下的文件列表,有path参数，就是获取path目录下的文件列表
 async function fetchFileList(params) {
     console.log(params)
     // let name = null
