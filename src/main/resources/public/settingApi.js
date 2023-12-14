@@ -38,12 +38,7 @@ async function saveSettings(params) {
 // 进行排序的时候，参数放在body里面，不要放在url里面
 async function fetchFileList(params) {
     console.log(params)
-    // let name = null
-    // let isDirectory = null
-    // let path = null
-    // let size = null
-    // let createAt = null
-    // let children = []
+
         const resp = await fetch(BASE_URL + "/file/file_list", {
             method: "POST",
             headers: {

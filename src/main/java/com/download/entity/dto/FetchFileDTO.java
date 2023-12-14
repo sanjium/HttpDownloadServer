@@ -9,7 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FetchFileDTO {
     private String path;
+
     private String type;
+
     private String sort;
+
     private String order;
 }
