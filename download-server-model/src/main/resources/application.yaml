@@ -8,8 +8,28 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       max-lifetime: 70000
+  redis:
+    host: 43.248.191.29
+    password: zhangmengshan123
+    port: 36379
+  rabbitmq:
+    host: 43.248.191.29
+    port: 25672
+    username: guest
+    password: guest
+    virtual-host: /
   main:
     allow-circular-references: true
+executor:
+  thread:
+    # 配置核心线程数
+    core_pool_size: 10
+    # 配置最大线程数
+    max_pool_size: 20
+    # 配置队列大小
+    queue_capacity: 999
+    name:
+      prefix: async-download-service-
 
 mybatis-plus:
   global-config:

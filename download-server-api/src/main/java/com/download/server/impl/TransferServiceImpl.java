@@ -1,14 +1,18 @@
 package com.download.server.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.download.config.RabbitmqConfig;
 import com.download.entity.ResponseResult;
 import com.download.entity.domain.Transfer;
+import com.download.entity.dto.SendTransferMsgDTO;
 import com.download.entity.vo.GetTasksVO;
 import com.download.mapper.TransferMapper;
 import com.download.server.TransferService;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,10 +30,13 @@ public class TransferServiceImpl extends ServiceImpl<TransferMapper, Transfer> i
 
     final TransferUpdateService transferUpdateService;
 
+    final RabbitTemplate rabbitTemplate;
+
     @Autowired
-    public TransferServiceImpl(TransferMapper transferMapper, TransferUpdateService transferUpdateService) {
+    public TransferServiceImpl(TransferMapper transferMapper, TransferUpdateService transferUpdateService, RabbitTemplate rabbitTemplate) {
         this.transferMapper = transferMapper;
         this.transferUpdateService = transferUpdateService;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     @Override
@@ -46,7 +53,11 @@ public class TransferServiceImpl extends ServiceImpl<TransferMapper, Transfer> i
         transfer.setThreads(2);
         transfer.setTimeLeft("0m 0s");
         transfer.setFinishedAt(LocalDateTime.now().plusHours(1));
-        save(transfer);
+        boolean isSave = save(transfer);
+        if (isSave) {
+            SendTransferMsgDTO transferMsgDTO = new SendTransferMsgDTO(transfer.getId(), transfer.getUrl());
+            rabbitTemplate.convertAndSend(RabbitmqConfig.EXCHANGE_TOPICS_INFORM, RabbitmqConfig.ROUTINGKEY_DOWNLOAD, JSON.toJSONString(transferMsgDTO));
+        }
         return ResponseResult.ok("访问提交接口成功");
     }
 

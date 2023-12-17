@@ -8,6 +8,16 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       max-lifetime: 70000
+  redis:
+    host: 43.248.191.29
+    port: 36379
+    password: zhangmengshan123
+  rabbitmq:
+    host: 43.248.191.29
+    port: 25672
+    username: guest
+    password: guest
+    virtual-host: /
   main:
     allow-circular-references: true
 
