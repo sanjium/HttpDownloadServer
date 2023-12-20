@@ -1,0 +1,50 @@
+server:
+  port: 8081
+spring:
+  datasource:
+    url: jdbc:mysql://43.248.191.29:33063/download_server?characterEncoding=utf-8&serverTimezone=UTC
+    username: root
+    password: zhangmengshan123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      max-lifetime: 70000
+  redis:
+    host: 43.248.191.29
+    password: zhangmengshan123
+    port: 36379
+  rabbitmq:
+    host: 43.248.191.29
+    port: 25672
+    username: guest
+    password: guest
+    virtual-host: /
+  main:
+    allow-circular-references: true
+executor:
+  thread:
+    # 配置核心线程数
+    core_pool_size: 10
+    # 配置最大线程数
+    max_pool_size: 20
+    # 配置队列大小
+    queue_capacity: 999
+    name:
+      prefix: async-download-service-
+
+mybatis-plus:
+  global-config:
+    db-config:
+      # id生成策略 auto为数据库自增
+      id-type: auto
+      # 日志
+      logic-delete-field: delFlag
+      logic-delete-value: 0
+      logic-not-delete-value: 1
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:/mapper/**/*.xml
+#  configuration:
+#      #是否开启自动驼峰命名规则（camel case）映射，即从经典数据库列名 A_COLUMN（下划线命名） 到经典 Java 属性名 aColumn（驼峰命名） 的类似映射
+#      map-underscore-to-camel-case: false
+
+
