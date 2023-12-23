@@ -3,6 +3,7 @@ package com.download.service.impl;
 import com.download.entity.dto.SendTransferMsgDTO;
 import com.download.service.AsyncService;
 import lombok.extern.slf4j.Slf4j;
+import lombok.var;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
