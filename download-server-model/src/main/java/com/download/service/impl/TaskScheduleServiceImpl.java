@@ -48,7 +48,7 @@ public class TaskScheduleServiceImpl implements TaskScheduleService {
                         taskThread.start();
                         taskThreads.put(taskId,taskThread);
                     }
-                } else if (taskStatus.equalsIgnoreCase("")) {
+                } else if (taskStatus.equalsIgnoreCase("pending")) {
                     if (taskThread != null && taskThread.isAlive()) {
                         // 关闭任务线程实现任务的关闭
                         taskThread.stop();
