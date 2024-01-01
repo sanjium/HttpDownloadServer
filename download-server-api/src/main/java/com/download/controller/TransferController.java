@@ -46,7 +46,6 @@ public class TransferController {
     @LogAnnotation(module = "任务列表模块", operation = "重新提交任务")
     public ResponseResult refreshTransfer(@RequestBody List<Long> ids) {
         return transferService.refreshTransfer(ids);
-
     }
 
     @PostMapping("/update_thread")
