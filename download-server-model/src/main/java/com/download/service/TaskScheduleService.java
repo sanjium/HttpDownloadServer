@@ -6,7 +6,8 @@ import com.download.entity.dto.SendTransferMsgDTO;
 public interface TaskScheduleService {
 
 
-    void start(SendTransferMsgDTO sendTransferMsgDTO);
+    void taskPolling(SendTransferMsgDTO sendTransferMsgDTO);
+
 
    // TaskState getTaskState(SendTransferMsgDTO sendTransferMsgDTO);
 }
