@@ -22,6 +22,7 @@ public class TaskServiceImpl implements TaskService {
         try {
             URL url = new URL(sendTransferMsgDTO.getUrl());
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            //读取header信息，获取关键字Content-length
             connection.setRequestMethod("HEAD");
             long size = connection.getContentLength();
             int numChunks = 0;
@@ -47,9 +48,12 @@ public class TaskServiceImpl implements TaskService {
         try {
             URL fileUrl = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) fileUrl.openConnection();
+            //设置range字段
             connection.setRequestProperty("Range", "bytes=" + startByte + "-" + endByte);
             try (InputStream in = new BufferedInputStream(connection.getInputStream());
-                 RandomAccessFile raf = new RandomAccessFile(destination, "wyj")) {
+                 //创建临时文件
+                 RandomAccessFile raf = new RandomAccessFile(destination, "/wyj")) {
+                //seek到文件大小的位置
                  raf.seek(startByte);
                  byte[] buffer = new byte[4096];
                  int bytesRead;
@@ -64,7 +68,7 @@ public class TaskServiceImpl implements TaskService {
         }
 
     }
-
+    //计算分片
     @Override
     public int partition(Long size) {
         final int MIN_CHUNK_SIZE_32KB = 32 * 1024;

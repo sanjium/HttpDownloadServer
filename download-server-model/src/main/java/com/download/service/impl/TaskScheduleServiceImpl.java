@@ -1,23 +1,13 @@
 package com.download.service.impl;
-
-import com.download.entity.TaskState;
 import com.download.entity.dto.SendTransferMsgDTO;
 import com.download.service.TaskScheduleService;
-import com.download.service.TaskService;
 import org.apache.tomcat.util.threads.TaskThread;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Timer;
-import java.util.concurrent.ScheduledExecutorService;
-
 @Service
 public class TaskScheduleServiceImpl implements TaskScheduleService {
-
 
     /*@Override
     @Scheduled(fixedRate = 200)
