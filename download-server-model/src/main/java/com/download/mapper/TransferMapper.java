@@ -13,6 +13,4 @@ import java.util.List;
 public interface TransferMapper extends BaseMapper<Transfer> {
 
 
-    @Select("SELECT id from download_transfer where status=#{status}}")
-    List<Transfer> list(@RequestParam("status") String status);
 }
