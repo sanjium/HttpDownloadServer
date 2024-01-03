@@ -5,39 +5,46 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.download.config.RabbitmqConfig;
 import com.download.entity.ResponseResult;
 import com.download.entity.domain.Transfer;
 import com.download.entity.dto.SendTransferMsgDTO;
 import com.download.entity.vo.GetTasksVO;
 import com.download.mapper.TransferMapper;
 import com.download.server.TransferService;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
+import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.util.concurrent.ListenableFutureCallback;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
+@Slf4j
 public class TransferServiceImpl extends ServiceImpl<TransferMapper, Transfer> implements TransferService {
 
     final TransferMapper transferMapper;
 
     final TransferUpdateService transferUpdateService;
 
-    final RabbitTemplate rabbitTemplate;
+    final KafkaTemplate<String, Object> kafkaTemplate;
 
     @Autowired
-    public TransferServiceImpl(TransferMapper transferMapper, TransferUpdateService transferUpdateService, RabbitTemplate rabbitTemplate) {
+    public TransferServiceImpl(TransferMapper transferMapper, TransferUpdateService transferUpdateService, KafkaTemplate<String, Object> kafkaTemplate) {
         this.transferMapper = transferMapper;
         this.transferUpdateService = transferUpdateService;
-        this.rabbitTemplate = rabbitTemplate;
+        this.kafkaTemplate = kafkaTemplate;
     }
+
+    /**
+     * MQ主题：提交任务
+     */
+    public static final String TOPIC_DOWNLOAD_SUBMIT = "download_submit";
 
     @Override
     public ResponseResult<String> submitTransfer(String url) {
@@ -56,7 +63,18 @@ public class TransferServiceImpl extends ServiceImpl<TransferMapper, Transfer> i
         boolean isSave = save(transfer);
         if (isSave) {
             SendTransferMsgDTO transferMsgDTO = new SendTransferMsgDTO(transfer.getId(), transfer.getUrl());
-            rabbitTemplate.convertAndSend(RabbitmqConfig.EXCHANGE_TOPICS_INFORM, RabbitmqConfig.ROUTINGKEY_DOWNLOAD, JSON.toJSONString(transferMsgDTO));
+            ListenableFuture<SendResult<String, Object>> future = kafkaTemplate.send(TOPIC_DOWNLOAD_SUBMIT, JSON.toJSONString(transferMsgDTO));
+            log.info("发送消息:{}", JSON.toJSONString(transferMsgDTO));
+            future.addCallback(new ListenableFutureCallback<SendResult<String, Object>>() {
+                @Override
+                public void onSuccess(SendResult<String, Object> result) {
+                    log.info("消息发送成功!");
+                }
+                @Override
+                public void onFailure(Throwable ex) {
+                    log.info("消息发送失败!!");
+                }
+            });
         }
         return ResponseResult.ok("访问提交接口成功");
     }
