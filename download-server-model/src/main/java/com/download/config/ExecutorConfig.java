@@ -11,8 +11,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @description:
- * @author：三玖
- * @date: 2023/12/17
+ * @author：三 @date: 2023/12/17
  */
 @Configuration
 @EnableAsync
@@ -46,7 +45,5 @@ public class ExecutorConfig {
         threadPoolTaskExecutor.initialize();
         return threadPoolTaskExecutor;
     }
-
-
 
 }

@@ -1,6 +1,5 @@
 package com.download.controller;
 
-
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.download.aop.LogAnnotation;
 import com.download.entity.ResponseResult;
@@ -14,8 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-
-
 @RestController
 @RequestMapping("/file")
 public class FileController {
@@ -35,6 +32,7 @@ public class FileController {
             path = fetchFileDTO.getPath();
         }
         Path path1 = Paths.get(path);
+        //默认正序
         if(fetchFileDTO.getSort().equals("null")) {
             List<FileVO> fileList = fileService.getFileList(path1.toAbsolutePath().getRoot().toString() + path1.toString(),
                     fetchFileDTO.getType());

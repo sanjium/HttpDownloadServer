@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class FetchFileDTO {
     private String path;
 
+    //筛选选项
     private String type;
 
     private String sort;

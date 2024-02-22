@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface FileService{
 
-    List<FileVO> getFileList(String path, String filter);
+    List<FileVO> getFileList(String path, String type);
 
     List<FileVO> sortFileList(String path, String sort,String order);
 }

@@ -18,7 +18,7 @@ public class FileServiceImpl implements FileService {
         List<FileVO> fileList = new ArrayList<>();
         // 读取本地目录中的文件信息
         List<File> files = readLocalFiles(path, type);
-        System.out.println("---------------------------------------");
+        //System.out.println("---------------------------------------");
         // 将文件信息封装到FileVo对象中
         for (File file : files) {
             FileVO fileVo = new FileVO();
