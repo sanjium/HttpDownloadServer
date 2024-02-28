@@ -79,4 +79,9 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <finalName>download-server-api</finalName>
+    </build>
+
 </project>

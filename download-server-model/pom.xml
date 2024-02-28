@@ -93,4 +93,8 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <finalName>download-server-model</finalName>
+    </build>
+
 </project>
