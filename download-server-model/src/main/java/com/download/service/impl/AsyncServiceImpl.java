@@ -6,7 +6,6 @@ import com.download.entity.dto.SendTransferMsgDTO;
 import com.download.service.AsyncService;
 import lombok.extern.slf4j.Slf4j;
 
-import lombok.var;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 

@@ -22,6 +22,7 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
 
 @Service
@@ -47,7 +48,7 @@ public class TransferServiceImpl extends ServiceImpl<TransferMapper, Transfer> i
     public static final String TOPIC_DOWNLOAD_SUBMIT = "download_submit";
 
     @Override
-    public ResponseResult<String> submitTransfer(String url) {
+    public ResponseResult<Long> submitTransfer(String url) {
         Transfer transfer = new Transfer();
         transfer.setType("http");
         transfer.setName("测试名称");
@@ -64,19 +65,28 @@ public class TransferServiceImpl extends ServiceImpl<TransferMapper, Transfer> i
         if (isSave) {
             SendTransferMsgDTO transferMsgDTO = new SendTransferMsgDTO(transfer.getId(), transfer.getUrl());
             ListenableFuture<SendResult<String, Object>> future = kafkaTemplate.send(TOPIC_DOWNLOAD_SUBMIT, JSON.toJSONString(transferMsgDTO));
+
+
+//            CompletableFuture<SendResult<String, Object>> future1 = kafkaTemplate.send(TOPIC_DOWNLOAD_SUBMIT, JSON.toJSONString(transferMsgDTO));
+//            future1.thenAccept(sendResult->{
+//                if(sendResult.)
+//            })
+
+
             log.info("发送消息:{}", JSON.toJSONString(transferMsgDTO));
             future.addCallback(new ListenableFutureCallback<SendResult<String, Object>>() {
                 @Override
                 public void onSuccess(SendResult<String, Object> result) {
                     log.info("消息发送成功!");
                 }
+
                 @Override
                 public void onFailure(Throwable ex) {
                     log.info("消息发送失败!!");
                 }
             });
         }
-        return ResponseResult.ok("访问提交接口成功");
+        return ResponseResult.ok(transfer.getId());
     }
 
     @Override
@@ -135,6 +145,7 @@ public class TransferServiceImpl extends ServiceImpl<TransferMapper, Transfer> i
     public ResponseResult getTasks(Integer pageNum, Integer pageSize, String status) {
         LambdaQueryWrapper<Transfer> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(getAllTasks(status), Transfer::getStatus, status);
+        lambdaQueryWrapper.orderByDesc(Transfer::getCreatedAt);
         Page<Transfer> page = new Page<>(pageNum, pageSize);
         page(page, lambdaQueryWrapper);
         List<Transfer> records = page.getRecords();

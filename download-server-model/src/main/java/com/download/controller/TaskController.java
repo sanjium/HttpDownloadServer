@@ -14,7 +14,6 @@ public class TaskController {
     @Autowired
     private TaskScheduleService service;
 
-
     @GetMapping("/status")
     public void getTaskStatus(@RequestBody SendTransferMsgDTO sendTransferMsgDTO){
         service.taskPolling(sendTransferMsgDTO);

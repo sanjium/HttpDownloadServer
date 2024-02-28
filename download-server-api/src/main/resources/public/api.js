@@ -44,8 +44,6 @@ async function fetchTasks(params) {
 }
 
 
-
-
 // 改变线程数
 async function changeThreads(params) {
     console.log(params)
@@ -82,6 +80,29 @@ async function submitDownloadPath(path) {
     const data = await resp.json()
     console.log(data, 'data json')
     if (resp.code === 200) {
+        let tid = resp.data
+        let reqUrl = "http://localhost:8081/websocket/transfer/" + tid;
+        let socket = new WebSocket(reqUrl.replace("http", "ws"));
+        //打开事件
+        socket.onopen = function () {
+            console.log("Socket 已打开");
+        };
+        //关闭事件
+        socket.onclose = function () {
+            console.log("Socket已关闭");
+        };
+        //获得消息事件
+        socket.onmessage = function (msg) {
+            console.log("onmessage--" + msg.data);
+            //发现消息进入    开始处理前端触发逻辑
+        };
+        //发生了错误事件
+        socket.onerror = function () {
+            alert("Socket发生了错误");
+            //此时可以尝试刷新页面
+        }
+
+
         location.reload()
     }
 }

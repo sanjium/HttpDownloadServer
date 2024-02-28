@@ -10,9 +10,11 @@ import com.download.server.FileService;
 import com.download.server.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+
 @RestController
 @RequestMapping("/file")
 public class FileController {
@@ -21,25 +23,26 @@ public class FileController {
     private FileService fileService;
     @Autowired
     private SettingService settingService;
-    @PostMapping ("/file_list")
+
+    @PostMapping("/file_list")
     @LogAnnotation(operation = "查看文件")
     public ResponseResult fetchFilterFile(@RequestBody FetchFileDTO fetchFileDTO) {
         LambdaQueryWrapper<Setting> wrapper = new LambdaQueryWrapper<>();
         String path = "";
-        if(fetchFileDTO.getPath().equals("/")){
+        if (fetchFileDTO.getPath().equals("/")) {
             path = settingService.getOne(wrapper).getDownloadPath();
-        }else{
+        } else {
             path = fetchFileDTO.getPath();
         }
         Path path1 = Paths.get(path);
         //默认正序
-        if(fetchFileDTO.getSort().equals("null")) {
+        if (fetchFileDTO.getSort().equals("null")) {
             List<FileVO> fileList = fileService.getFileList(path1.toAbsolutePath().getRoot().toString() + path1.toString(),
                     fetchFileDTO.getType());
             return ResponseResult.ok(fileList);
-        }else{
+        } else {
             List<FileVO> fileList2 = fileService.sortFileList(path1.toAbsolutePath().getRoot().toString() + path1.toString(),
-                    fetchFileDTO.getSort(),fetchFileDTO.getOrder());
+                    fetchFileDTO.getSort(), fetchFileDTO.getOrder());
             return ResponseResult.ok(fileList2);
         }
     }

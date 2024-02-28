@@ -54,12 +54,9 @@ public class TransferController {
         return transferService.updateThreadTransfer(updateThreadTransferDTO.getId(), updateThreadTransferDTO.getThreads());
     }
 
-
-
     @PostMapping("/get_tasks")
     @LogAnnotation(module = "任务列表模块", operation = "获取传输任务列表")
     public ResponseResult getTasks(@RequestBody GetTasksDTO getTasksDTO) {
-        System.out.println(getTasksDTO);
         return transferService.getTasks(getTasksDTO.getCurrentPage(), getTasksDTO.getLimit(),getTasksDTO.getStatus());
     }
 
